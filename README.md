@@ -1,24 +1,41 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
-
-Things you may want to cover:
-
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+## Table Schema
+### User
+| key | column | type |
+|-----|--------|------|
+| PK | id | integer |
+| - | name | string |
+| - | email | string |
+| - | password_digest | string |
+### Task
+| key | column | type |
+|-----|--------|------|
+| PK | id | integer |
+| FK1 | user_id | integer |
+| FK2 | priority_id | integer |
+| FK3 | status_id | integer |
+| - | name | string |
+| - | description | text |
+| - | deadline | date |
+### Priority
+| key | column | type |
+|-----|--------|------|
+| PK | id | integer |
+| - | name | string |
+### Status
+| key | column | type |
+|-----|--------|------|
+| PK | id | integer |
+| - | name | string |
+### Label
+| key | column | type |
+|-----|--------|------|
+| PK | id | integer |
+| - | name | string |
+### Labeling
+| key | column | type |
+|-----|--------|------|
+| PK | id | integer |
+| FK1 | task_id | integer |
+| FK2 | label_id | integer |
