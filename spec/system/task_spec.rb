@@ -56,7 +56,7 @@ RSpec.describe 'タスク管理機能', type: :system do
       visit edit_task_path(task)
       fill_in "task_name", with: "修正のタスク"
       fill_in "task_description", with: "朝食の買い物"
-      click_on "編集"
+      click_on "更新"
     end
     context "タスクを編集した場合" do
       let(:task) {FactoryBot.create(:task, name: "4つ目のタスク", description: "晩御飯の買い物")}
