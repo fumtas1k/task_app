@@ -23,13 +23,11 @@ ja:
       title: 一覧
     new:
       title: 新規登録
-      btn: 登録
       message: を新規登録しました!
     show:
       title: 詳細
     edit:
       title: 編集
-      btn: 編集
       message: を編集しました!
     delete:
       title: 削除
@@ -174,9 +172,9 @@ ja:
     select:
       prompt: 選択してください
     submit:
-      create: 登録する
-      submit: 保存する
-      update: 更新する
+      create: 登録
+      submit: 保存
+      update: 更新
   number:
     currency:
       format:

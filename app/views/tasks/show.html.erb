@@ -7,7 +7,7 @@
   </div>
   <div class="task-item">
     <h4><%= t "tasks.description" %></h4>
-    <p><%= simple_format(@task.description) %></p>
+    <%= simple_format h(@task.description) %>
   </div>
   <div class="task-item">
     <p><%= t "tasks.created_at" %>: <%= @task.created_at %></p>

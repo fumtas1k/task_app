@@ -18,6 +18,6 @@
       <%= form.label :description, class: "sr-only" %>
       <%= form.text_area :description, class: "form-control", placeholder: t("tasks.description"), required: true %>
     </div>
-    <%= form.submit yield(:btn), class: "btn btn-primary" %>
+    <%= form.submit nil, class: "btn btn-primary" %>
   <% end %>
 </div>
