@@ -1,4 +1,4 @@
-<% provide(:title, "新規登録") %>
-<% provide(:btn, "登録") %>
-<h1>新規登録</h1>
+<% provide(:title, t("tasks.new.title")) %>
+<% provide(:btn, t("tasks.new.btn")) %>
+<h1><%= t "tasks.new.title" %></h1>
 <%= render partial: "form", locals: {task: @task} %>
