@@ -5,7 +5,7 @@ RSpec.describe 'タスク管理機能', type: :system do
       visit new_task_path
       fill_in "task_name", with: task_name
       fill_in "task_description", with: task_description
-      click_on "登録"
+      click_on I18n.t("helpers.submit.create")
     end
     context 'タスクを新規作成した場合' do
       let(:task_name) { "最初のタスク" }
@@ -22,7 +22,7 @@ RSpec.describe 'タスク管理機能', type: :system do
       let(:task_name) { " " }
       let(:task_description) { " " }
       it "新規作成画面が表示される" do
-        expect(page).to have_content "新規登録"
+        expect(page).to have_content I18n.t("tasks.new.title")
       end
       it "エラーメッセージが表示される" do
         # エラーカウントは2
@@ -56,7 +56,7 @@ RSpec.describe 'タスク管理機能', type: :system do
       visit edit_task_path(task)
       fill_in "task_name", with: "修正のタスク"
       fill_in "task_description", with: "朝食の買い物"
-      click_on "更新"
+      click_on I18n.t("helpers.submit.update")
     end
     context "タスクを編集した場合" do
       let(:task) {FactoryBot.create(:task, name: "4つ目のタスク", description: "晩御飯の買い物")}
@@ -82,7 +82,7 @@ RSpec.describe 'タスク管理機能', type: :system do
           page.accept_confirm do
             find_link("削除", href: task_path(task)).click
           end
-          expect(page).to have_content "5つ目のタスク を削除しました"
+          expect(page).to have_content "5つ目のタスク #{I18n.t("tasks.delete.message")}"
         }.to change { Task.count }.by(-1)
       end
     end
