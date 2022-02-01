@@ -35,16 +35,16 @@ RSpec.describe 'タスク管理機能', type: :system do
   describe '一覧表示機能' do
     context '一覧画面に遷移した場合' do
       it '作成済みのタスク一覧が表示される' do
-        task = FactoryBot.create(:task, name: "最初のタスク", description: "晩御飯の買い物")
+        task = FactoryBot.create(:task, name: "2つ目のタスク", description: "晩御飯の買い物")
         visit tasks_path
-        expect(page).to have_content "最初のタスク"
+        expect(page).to have_content "2つ目のタスク"
       end
     end
   end
   describe '詳細表示機能' do
     context '任意のタスク詳細画面に遷移した場合' do
       it '該当タスクの内容が表示される' do
-        task = FactoryBot.create(:task, name: "最初のタスク", description: "晩御飯の買い物")
+        task = FactoryBot.create(:task, name: "3つ目タスク", description: "晩御飯の買い物")
         visit task_path(task)
         expect(page).to have_content task.name
         expect(page).to have_content task.description
@@ -59,17 +59,31 @@ RSpec.describe 'タスク管理機能', type: :system do
       click_on "編集"
     end
     context "タスクを編集した場合" do
-      let(:task) {FactoryBot.create(:task, name: "最初のタスク", description: "晩御飯の買い物")}
+      let(:task) {FactoryBot.create(:task, name: "4つ目のタスク", description: "晩御飯の買い物")}
       it "詳細画面にリダイレクトする" do
         expect(current_path).to eq task_path(task)
       end
       it "元の情報は表示されない" do
-        expect(page).to_not have_content "最初のタスク"
+        expect(page).to_not have_content "4つ目のタスク"
         expect(page).to_not have_content "晩御飯の買い物"
       end
       it "変更が反映される" do
         expect(page).to have_content "修正のタスク", count: 2
         expect(page).to have_content "朝食の買い物"
+      end
+    end
+  end
+  describe "削除機能" do
+    context "一覧画面でタスクを削除した場合" do
+      it "削除しましたと表示され、taskの数が1つ減る" do
+        task = FactoryBot.create(:task, name: "5つ目のタスク", description: "晩御飯の買い物")
+        visit tasks_path
+        expect {
+          page.accept_confirm do
+            find_link("削除", href: task_path(task)).click
+          end
+          expect(page).to have_content "5つ目のタスク を削除しました"
+        }.to change { Task.count }.by(-1)
       end
     end
   end
