@@ -4,10 +4,12 @@ RSpec.describe 'タスク管理機能', type: :system do
     before do
       visit new_task_path
       fill_in "task_name", with: task_name
+      fill_in "task_description", with: task_description
       click_on "登録"
     end
     context 'タスクを新規作成した場合' do
       let(:task_name) { "最初のタスク" }
+      let(:task_description) { "晩御飯の買い物" }
       it "詳細画面のurlにリダイレクトする" do
         expect(current_path).to eq task_path(Task.last)
       end
@@ -16,15 +18,16 @@ RSpec.describe 'タスク管理機能', type: :system do
         expect(page).to have_content "最初のタスク", count:2
       end
     end
-    context "タイトルを空白文字にしてタスクを新規作成した場合" do
+    context "タスク名、タスク詳細を空白文字にしてタスクを新規作成した場合" do
       let(:task_name) { " " }
+      let(:task_description) { " " }
       it "新規作成画面が表示される" do
         expect(page).to have_content "新規登録"
       end
       it "エラーメッセージが表示される" do
-        # エラーカウントは1
+        # エラーカウントは2
         within "#error_explanation" do
-          expect(page).to have_content "1"
+          expect(page).to have_content "2"
         end
       end
     end
@@ -32,7 +35,7 @@ RSpec.describe 'タスク管理機能', type: :system do
   describe '一覧表示機能' do
     context '一覧画面に遷移した場合' do
       it '作成済みのタスク一覧が表示される' do
-        task = FactoryBot.create(:task, name: "最初のタスク")
+        task = FactoryBot.create(:task, name: "最初のタスク", description: "晩御飯の買い物")
         visit tasks_path
         expect(page).to have_content "最初のタスク"
       end

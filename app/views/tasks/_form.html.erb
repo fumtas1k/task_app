@@ -16,7 +16,7 @@
     </div>
     <div class="form-group">
       <%= form.label :description, class: "sr-only" %>
-      <%= form.text_area :description, class: "form-control", placeholder: :description %>
+      <%= form.text_area :description, class: "form-control", placeholder: :description, required: true %>
     </div>
     <%= form.submit yield(:btn), class: "btn btn-primary" %>
   <% end %>
