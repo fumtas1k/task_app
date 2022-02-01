@@ -14,7 +14,7 @@ class TasksController < ApplicationController
   def create
     @task = Task.new(task_params)
     if @task.save
-      flash[:succss] = "#{@task.name} を新規登録しました!"
+      flash[:success] = "#{@task.name} を新規登録しました!"
       redirect_to @task
     else
       render :new
