@@ -89,7 +89,7 @@ RSpec.describe 'タスク管理機能', type: :system do
         visit tasks_path
         expect {
           page.accept_confirm do
-            find_link("削除", href: task_path(task01)).click
+            click_link(I18n.t("tasks.delete.title"), href: task_path(task01))
           end
           expect(page).to have_content "#{task01.name} #{I18n.t("tasks.delete.message")}"
         }.to change { Task.count }.by(-1)
