@@ -17,7 +17,7 @@
 | FK3 | status_id | integer |
 | - | name | string |
 | - | description | text |
-| - | deadline | date |
+| - | expired_at | date |
 ### Priority
 | key | column | type |
 |-----|--------|------|
