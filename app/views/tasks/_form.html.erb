@@ -18,6 +18,10 @@
       <%= form.label :description, class: "sr-only" %>
       <%= form.text_area :description, class: "form-control", placeholder: t("tasks.description"), required: true %>
     </div>
+    <div class="form-group">
+      <%= form.label :expired_at %>
+      <%= form.datetime_field :expired_at, class: "form-control", required: true %>
+    </div>
     <%= form.submit nil, class: "btn btn-primary" %>
   <% end %>
 </div>

@@ -13,9 +13,13 @@ ja:
       task:
         name: タイトル
         description: 詳細説明
+        expired_at: 終了期限
+        created_at: 登録日時
+        updated_at: 更新日時
   tasks:
     name: タイトル
     description: 詳細説明
+    expired_at: 終了期限
     created_at: 登録日時
     updated_at: 更新日時
     link: リンク
@@ -231,7 +235,7 @@ ja:
   time:
     am: 午前
     formats:
-      default: "%Y年%m月%d日(%a) %H時%M分%S秒 %z"
+      default: "%Y年%m月%d日(%a) %H時%M分%S秒"
       long: "%Y/%m/%d %H:%M"
       short: "%m/%d %H:%M"
     pm: 午後

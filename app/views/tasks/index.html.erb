@@ -7,6 +7,7 @@
       <tr>
         <th><%= t "tasks.name" %></th>
         <th><%= t "tasks.description" %></th>
+        <th><%= t "tasks.expired_at" %></th>
         <th><%= t "tasks.created_at" %></th>
         <th><%= t "tasks.link" %></th>
       </tr>
@@ -16,7 +17,8 @@
         <tr>
           <td><%= task.name %></td>
           <td><%= simple_format h(task.description) %></td>
-          <td><%= task.created_at %></td>
+          <td><%= l task.expired_at %></td>
+          <td><%= l task.created_at %></td>
           <td>
             <%= link_to t("tasks.show.title"), task_path(task), class: "btn btn-outline-primary" %>
             <%= link_to t("tasks.edit.title"), edit_task_path(task), class: "btn btn-outline-success" %>

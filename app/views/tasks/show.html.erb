@@ -10,8 +10,12 @@
     <%= simple_format h(@task.description) %>
   </div>
   <div class="task-item">
-    <p><%= t "tasks.created_at" %>: <%= @task.created_at %></p>
-    <p><%= t "tasks.updated_at" %>: <%= @task.updated_at %></p>
+    <h4><%= t "tasks.expired_at" %></h4>
+    <%= l @task.expired_at %>
+  </div>
+  <div class="task-item">
+    <p><%= t "tasks.created_at" %>: <%= l @task.created_at %></p>
+    <p><%= t "tasks.updated_at" %>: <%= l @task.updated_at %></p>
   </div>
   <%= link_to t("tasks.index.title"), tasks_path, class: "btn btn-outline-info" %>
   <%= link_to t("tasks.edit.title"), edit_task_path(@task), class: "btn btn-outline-success" %>

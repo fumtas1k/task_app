@@ -6,11 +6,13 @@ RSpec.describe 'タスク管理機能', type: :system do
       visit new_task_path
       fill_in "task_name", with: task_name
       fill_in "task_description", with: task_description
+      fill_in "task_expired_at", with: task_expired_at
       click_on I18n.t("helpers.submit.create")
     end
     context 'タスクを新規作成した場合' do
       let(:task_name) { "2つ目のタスク" }
       let(:task_description) { "2番目の仕事" }
+      let(:task_expired_at) { 3.days.ago }
       it "詳細画面のurlにリダイレクトする" do
         expect(current_path).to eq task_path(Task.last)
       end
@@ -22,6 +24,7 @@ RSpec.describe 'タスク管理機能', type: :system do
     context "タスク名、タスク詳細を空白文字にしてタスクを新規作成した場合" do
       let(:task_name) { " " }
       let(:task_description) { " " }
+      let(:task_expired_at) { 3.days.ago }
       it "新規作成画面が表示される" do
         expect(page).to have_content I18n.t("tasks.new.title")
       end
