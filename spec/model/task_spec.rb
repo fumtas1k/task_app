@@ -1,6 +1,6 @@
 require 'rails_helper'
 describe 'タスクモデル機能', type: :model do
-  let(:expired_at) { 3.days.ago }
+  let(:expired_at) { 3.days.after }
   describe 'バリデーションのテスト' do
     context 'タスクの名前が空の場合' do
       it 'バリデーションにひっかる' do

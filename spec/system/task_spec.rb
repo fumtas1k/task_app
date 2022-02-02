@@ -12,7 +12,7 @@ RSpec.describe 'タスク管理機能', type: :system do
     context 'タスクを新規作成した場合' do
       let(:task_name) { "2つ目のタスク" }
       let(:task_description) { "2番目の仕事" }
-      let(:task_expired_at) { 3.days.ago }
+      let(:task_expired_at) { 3.days.after }
       it "詳細画面のurlにリダイレクトする" do
         expect(current_path).to eq task_path(Task.last)
       end
@@ -24,7 +24,7 @@ RSpec.describe 'タスク管理機能', type: :system do
     context "タスク名、タスク詳細を空白文字にしてタスクを新規作成した場合" do
       let(:task_name) { " " }
       let(:task_description) { " " }
-      let(:task_expired_at) { 3.days.ago }
+      let(:task_expired_at) { 3.days.after }
       it "新規作成画面が表示される" do
         expect(page).to have_content I18n.t("tasks.new.title")
       end
@@ -38,9 +38,14 @@ RSpec.describe 'タスク管理機能', type: :system do
   end
   describe '一覧表示機能' do
     before do
-      2.times do
-        FactoryBot.create(:task)
-        sleep(1)
+      4.times do |i|
+        if i == 1
+          @task_created_after = FactoryBot.create(:task, created_at: 1.years.after)
+        elsif i == 2
+          @task_expired_after = FactoryBot.create(:task, expired_at: 1.years.after)
+        else
+          FactoryBot.create(:task)
+        end
       end
       @task03 = FactoryBot.create(:task, name: "3つ目のタスク", description: "3番目の仕事")
       visit tasks_path
@@ -52,7 +57,15 @@ RSpec.describe 'タスク管理機能', type: :system do
     end
     context 'タスクが作成日時の降順に並んでいる場合' do
       it '新しいタスクが一番上に表示される' do
-        expect(all("tbody tr").first).to have_content @task03.name
+        expect(all("tbody tr").first).to have_content I18n.l(@task_created_after.created_at)
+      end
+    end
+    context "終了期限ソートリンクをクリックした場合" do
+      before do
+        all("tr th.tasks-sort")[0].click_link I18n.t("tasks.index.sort")
+      end
+      it "終了期限が最も未来のタスクが一番上に表示される" do
+        expect(all("tbody tr").first).to have_content I18n.l(@task_created_after.created_at)
       end
     end
   end

@@ -7,8 +7,8 @@
       <tr>
         <th><%= t "tasks.name" %></th>
         <th><%= t "tasks.description" %></th>
-        <th><%= t "tasks.expired_at" %></th>
-        <th><%= t "tasks.created_at" %></th>
+        <th class="tasks-sort"><%= t "tasks.expired_at" %><br><%= sort_by("expired_at" ,t(".sort")) %></th>
+        <th class="tasks-sort"><%= t "tasks.created_at" %><br><%= sort_by("created_at" ,t(".sort")) %></th>
         <th><%= t "tasks.link" %></th>
       </tr>
     </thead>

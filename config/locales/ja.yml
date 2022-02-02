@@ -25,6 +25,7 @@ ja:
     link: リンク
     index:
       title: 一覧
+      sort: ソートする
     new:
       title: 新規登録
       message: を新規登録しました!
@@ -40,7 +41,6 @@ ja:
     errors:
       error: 件
       message: のエラーがあります。
-
   date:
     abbr_day_names:
     - 日
