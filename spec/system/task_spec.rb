@@ -6,6 +6,7 @@ RSpec.describe 'タスク管理機能', type: :system do
       visit new_task_path
       fill_in "task_name", with: task_name
       fill_in "task_description", with: task_description
+      select task_status, from: "task_status"
       fill_in "task_expired_at", with: task_expired_at
       click_on I18n.t("helpers.submit.create")
     end
@@ -13,6 +14,7 @@ RSpec.describe 'タスク管理機能', type: :system do
       let(:task_name) { "2つ目のタスク" }
       let(:task_description) { "2番目の仕事" }
       let(:task_expired_at) { 3.days.after }
+      let(:task_status) { I18n.t("tasks.status.#{Task.statuses.keys[1]}") }
       it "詳細画面のurlにリダイレクトする" do
         expect(current_path).to eq task_path(Task.last)
       end
@@ -24,6 +26,7 @@ RSpec.describe 'タスク管理機能', type: :system do
     context "タスク名、タスク詳細を空白文字にしてタスクを新規作成した場合" do
       let(:task_name) { " " }
       let(:task_description) { " " }
+      let(:task_status) { I18n.t("tasks.status.#{Task.statuses.keys[1]}") }
       let(:task_expired_at) { 3.days.after }
       it "新規作成画面が表示される" do
         expect(page).to have_content I18n.t("tasks.new.title")
@@ -65,7 +68,7 @@ RSpec.describe 'タスク管理機能', type: :system do
         all("tr th.tasks-sort")[0].click_link I18n.t("tasks.index.sort")
       end
       it "終了期限が最も未来のタスクが一番上に表示される" do
-        expect(all("tbody tr").first).to have_content I18n.l(@task_created_after.created_at)
+        expect(all("tbody tr").first).to have_content I18n.l(@task_expired_after.expired_at)
       end
     end
   end
