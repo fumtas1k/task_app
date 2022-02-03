@@ -17,9 +17,10 @@ ja:
         created_at: 登録日時
         updated_at: 更新日時
         status: ステータス
-        status_todo: 未着手
-        status_doing: 着手
-        status_done: 完了
+        statuses:
+          todo: 未着手
+          doing: 着手
+          done: 完了
   tasks:
     name: タイトル
     description: 詳細説明
@@ -35,6 +36,8 @@ ja:
     index:
       title: 一覧
       sort: ソートする
+      search: 検索
+      clear: クリア
     new:
       title: 新規登録
       message: を新規登録しました!

@@ -1,5 +1,11 @@
 <% provide(:title, t(".title")) %>
 <h1><%= t ".title" %></h1>
+<%= form_with(scope: :task, url: tasks_path, local: true, class: "search-form", method: :get) do |form| %>
+  <%= form.text_field :name, placeholder: t("tasks.name") %>
+  <%= form.select :status, Task.statuses.map{|status, index| [t("tasks.status.#{status}"), index]}, include_blank: t("tasks.status.title") %>
+  <%= form.submit t(".search"), class: "btn btn-warning" %>
+  <%= link_to t(".clear"), tasks_path, class: "btn btn-secondary" %>
+<% end %>
 <div class="table-container">
   <%= link_to t("tasks.new.title"), new_task_path, class: "btn btn-primary" %>
   <table>
@@ -7,8 +13,8 @@
       <tr>
         <th><%= t "tasks.name" %></th>
         <th><%= t "tasks.description" %></th>
-        <th class="tasks-sort"><%= t "tasks.expired_at" %><br><%= sort_by("expired_at" ,t(".sort")) %></th>
-        <th class="tasks-sort"><%= t "tasks.created_at" %><br><%= sort_by("created_at" ,t(".sort")) %></th>
+        <th class="tasks-sort"><%= t "tasks.expired_at" %><br><%= sort_by("expired_at" ,t(".sort"), @search_params) %></th>
+        <th class="tasks-sort"><%= t "tasks.created_at" %><br><%= sort_by("created_at" ,t(".sort"), @search_params) %></th>
         <th><%= t "tasks.status.title" %></th>
         <th><%= t "tasks.link" %></th>
       </tr>
