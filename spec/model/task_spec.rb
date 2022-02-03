@@ -50,7 +50,7 @@ describe 'タスクモデル機能', type: :model do
     end
     context "scopeメソッドでステータス検索をした場合" do
       let(:name) { nil }
-      let(:status_num) { Task.statuses[third_task.status] }
+      let(:status_num) { third_task.status }
       it "ステータスに完全一致するタスクが絞り込まれる" do
         expect(task_search).to include(third_task)
         expect(task_search).to_not include(second_task)
@@ -59,7 +59,7 @@ describe 'タスクモデル機能', type: :model do
     end
     context "scopeメソッドでタイトルのあいまい検索とステータス検索をした場合" do
       let(:name) { second_task.name }
-      let(:status_num) { Task.statuses[second_task.status] }
+      let(:status_num) { second_task.status }
       it "検索キーワードをタイトルに含み、かつステータスに完全一致するタスク絞り込まれる" do
         expect(task_search).to include(second_task)
         expect(task_search).to_not include(third_task)

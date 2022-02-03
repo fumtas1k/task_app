@@ -7,15 +7,16 @@ class Task < ApplicationRecord
 
   scope :change_sort, -> (column, direction) { order("#{column} #{direction}") }
   scope :search, -> (name, status) {
-    if name.nil? && status.nil?
+    status_num = self.statuses[status]
+    if name.nil? && status_num.nil?
       change_sort(sort_column, sort_direction)
     else
-      search_sql = if name.present? && status.present?
-        ["tasks.name LIKE ? AND tasks.status = ?", "%#{Task.sanitize_sql_like(name)}%", "#{status}"]
+      search_sql = if name.present? && status_num.present?
+        ["tasks.name LIKE ? AND tasks.status = ?", "%#{self.sanitize_sql_like(name)}%", "#{status_num}"]
       elsif name.present?
-        ["tasks.name LIKE ?", "%#{Task.sanitize_sql_like(name)}%"]
-      elsif status.present?
-        ["tasks.status = ?", "#{status}"]
+        ["tasks.name LIKE ?", "%#{self.sanitize_sql_like(name)}%"]
+      elsif status_num.present?
+        ["tasks.status = ?", "#{status_num}"]
       end
       where(search_sql)
     end
