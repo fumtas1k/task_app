@@ -33,4 +33,38 @@ describe 'タスクモデル機能', type: :model do
       end
     end
   end
+
+  describe "検索機能" do
+    let!(:task) { FactoryBot.create(:task, name: "task", status: Task.statuses.keys[0]) }
+    let!(:second_task) { FactoryBot.create(:task, name: "sample", status: Task.statuses.keys[0]) }
+    let!(:third_task) { FactoryBot.create(:task, name: "sample", status: Task.statuses.keys[1])}
+    let(:task_search) { Task.search(name, status_num)}
+    context "scopeメソッドでタイトルのあいまい検索をした場合" do
+      let(:name) { task.name }
+      let(:status_num) { nil }
+      it "検索キーワードを含むタスクが絞り込まれる" do
+        expect(task_search).to include(task)
+        expect(task_search).to_not include(second_task)
+        expect(task_search.count).to eq 1
+      end
+    end
+    context "scopeメソッドでステータス検索をした場合" do
+      let(:name) { nil }
+      let(:status_num) { Task.statuses[third_task.status] }
+      it "ステータスに完全一致するタスクが絞り込まれる" do
+        expect(task_search).to include(third_task)
+        expect(task_search).to_not include(second_task)
+        expect(task_search.count).to eq 1
+      end
+    end
+    context "scopeメソッドでタイトルのあいまい検索とステータス検索をした場合" do
+      let(:name) { second_task.name }
+      let(:status_num) { Task.statuses[second_task.status] }
+      it "検索キーワードをタイトルに含み、かつステータスに完全一致するタスク絞り込まれる" do
+        expect(task_search).to include(second_task)
+        expect(task_search).to_not include(third_task)
+        expect(task_search.count).to eq 1
+      end
+    end
+  end
 end

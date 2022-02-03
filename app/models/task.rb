@@ -6,7 +6,7 @@ class Task < ApplicationRecord
   enum status: { todo: 0, doing: 10, done: 20 }, _prefix: true # 今後、追加できるよう10毎とした
 
   scope :change_sort, -> (column, direction) { order("#{column} #{direction}") }
-  scope :search, -> (name, status, sort_column, sort_direction) {
+  scope :search, -> (name, status) {
     if name.nil? && status.nil?
       change_sort(sort_column, sort_direction)
     else
@@ -17,7 +17,7 @@ class Task < ApplicationRecord
       elsif status.present?
         ["tasks.status = ?", "#{status}"]
       end
-      where(search_sql).change_sort(sort_column, sort_direction)
+      where(search_sql)
     end
   }
 end

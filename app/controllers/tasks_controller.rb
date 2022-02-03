@@ -8,7 +8,7 @@ class TasksController < ApplicationController
       Task.change_sort(sort_column, sort_direction)
     else
       @search_params = {task: search_params}
-      @tasks = Task.search(search_params[:name], search_params[:status], sort_column, sort_direction)
+      @tasks = Task.search(search_params[:name], search_params[:status]).change_sort(sort_column, sort_direction)
     end
   end
 
