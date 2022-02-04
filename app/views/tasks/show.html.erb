@@ -18,6 +18,10 @@
     <td><%= t "tasks.status.#{@task.status}" %></td>
   </tr>
   <tr class="task-item">
+    <th class="scope"><%= t "tasks.priority.title" %></th>
+    <td><%= t "tasks.priority.#{@task.priority}" %></td>
+  </tr>
+  <tr class="task-item">
     <th class="scope"><%= t "tasks.created_at" %></th>
     <td><%= l @task.created_at %></td>
   </tr>

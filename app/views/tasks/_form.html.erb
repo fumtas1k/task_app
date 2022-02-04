@@ -23,6 +23,10 @@
       <%= form.select :status, Task.statuses.keys.map{ |status| [t("tasks.status.#{status}"), status]}, class: "form-control", required: true %>
     </div>
     <div class="form-group">
+      <%= form.label :priority %>
+      <%= form.select :priority, Task.priorities.keys.map{ |priority| [t("tasks.priority.#{priority}"), priority]}, class: "form-control", selected: Task.priorities.keys[-1], required: true %>
+    </div>
+    <div class="form-group">
       <%= form.label :expired_at %>
       <%= form.datetime_field :expired_at, class: "form-control", required: true %>
     </div>

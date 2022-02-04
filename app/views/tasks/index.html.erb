@@ -13,9 +13,21 @@
       <tr>
         <th><%= t "tasks.name" %></th>
         <th><%= t "tasks.description" %></th>
-        <th class="tasks-sort"><%= t "tasks.expired_at" %><br><%= sort_by("expired_at" ,t(".sort"), @search_params) %></th>
-        <th class="tasks-sort"><%= t "tasks.created_at" %><br><%= sort_by("created_at" ,t(".sort"), @search_params) %></th>
+        <th class="tasks-sort" id="sort-expired">
+          <%= t "tasks.expired_at" %>
+          <br><%= sort_by("expired_at" ,t(".sort"), @search_params) %>
+        </th>
+        <th class="tasks-sort" id="sort-created">
+          <%= t "tasks.created_at" %>
+          <br>
+          <%= sort_by("created_at" ,t(".sort") ,@search_params) %>
+        </th>
         <th><%= t "tasks.status.title" %></th>
+        <th class="task-sort" id="sort-priority">
+          <%= t "tasks.priority.title" %>
+          <br>
+          <%= sort_by("priority", t(".sort"), @search_params) %>
+        </th>
         <th><%= t "tasks.link" %></th>
       </tr>
     </thead>
@@ -27,6 +39,7 @@
           <td><%= l task.expired_at %></td>
           <td><%= l task.created_at %></td>
           <td><%= t "tasks.status.#{task.status}" %></td>
+          <td><%= t "tasks.priority.#{task.priority}" %></td>
           <td>
             <%= link_to t("tasks.show.title"), task_path(task), class: "btn btn-outline-primary" %>
             <%= link_to t("tasks.edit.title"), edit_task_path(task), class: "btn btn-outline-success" %>

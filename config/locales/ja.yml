@@ -21,6 +21,10 @@ ja:
           todo: 未着手
           doing: 着手
           done: 完了
+        priorities:
+          low: 低
+          medium: 中
+          high: 高
   tasks:
     name: タイトル
     description: 詳細説明
@@ -33,6 +37,11 @@ ja:
       todo: 未着手
       doing: 着手
       done: 完了
+    priority:
+      title: 優先度
+      low: 低
+      medium: 中
+      high: 高
     index:
       title: 一覧
       sort: ソートする

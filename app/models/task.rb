@@ -4,6 +4,8 @@ class Task < ApplicationRecord
   validates :expired_at, presence: true
   validates :status, presence: true
   enum status: { todo: 0, doing: 10, done: 20 }, _prefix: true # 今後、追加できるよう10毎とした
+  validates :priority, presence: true
+  enum priority: { low: 0, medium: 10, high: 20 }, _prefix: true
 
   scope :change_sort, -> (column, direction) { order("#{column} #{direction}") }
   scope :search, -> (name, status) {
