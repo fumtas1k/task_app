@@ -1,9 +1,9 @@
 module TasksHelper
   def sort_by(column, column_name, hash_params={})
     if (sort_column == column && sort_direction == "desc")
-      direction, column_name = "asc", "#{column_name}↓"
+      direction, column_name = "asc", "#{column_name}▼"
     else
-      direction, column_name = "desc", "#{column_name}↑"
+      direction, column_name = "desc", "#{column_name}▲"
     end
     link_to column_name, { column: column, direction: direction }.merge(Hash(hash_params))
   end
