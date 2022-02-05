@@ -5,10 +5,10 @@ class TasksController < ApplicationController
   def index
     @tasks = if params[:clear] || params[:task].nil?
       @search_params = nil
-      Task.change_sort(sort_column, sort_direction)
+      Task.change_sort(sort_column, sort_direction).page(params[:page])
     else
       @search_params = {task: search_params}
-      @tasks = Task.search(search_params[:name], search_params[:status]).change_sort(sort_column, sort_direction)
+      @tasks = Task.search(search_params[:name], search_params[:status]).change_sort(sort_column, sort_direction).page(params[:page])
     end
   end
 
