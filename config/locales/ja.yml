@@ -19,7 +19,7 @@ ja:
         status: ステータス
         statuses:
           todo: 未着手
-          doing: 着手
+          doing: 着手中
           done: 完了
         priority: 優先度
         priorities:
@@ -36,7 +36,7 @@ ja:
     status:
       title: ステータス
       todo: 未着手
-      doing: 着手
+      doing: 着手中
       done: 完了
     priority:
       title: 優先度
