@@ -21,6 +21,7 @@ ja:
           todo: 未着手
           doing: 着手
           done: 完了
+        priority: 優先度
         priorities:
           low: 低
           medium: 中
@@ -43,8 +44,8 @@ ja:
       medium: 中
       high: 高
     index:
-      title: 一覧
-      sort: ソートする
+      title: タスク一覧
+      sort: ソート
       search: 検索
       clear: クリア
     new:
@@ -265,5 +266,6 @@ ja:
     formats:
       default: "%Y年%m月%d日(%a) %H時%M分%S秒"
       long: "%Y/%m/%d %H:%M"
+      medium: "%Y/%m/%d"
       short: "%m/%d %H:%M"
     pm: 午後

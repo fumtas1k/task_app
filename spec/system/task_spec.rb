@@ -73,7 +73,7 @@ RSpec.describe 'タスク管理機能', type: :system do
       context 'タスクが作成日時の降順に並んでいる場合' do
         it '新しいタスクが一番上に表示される' do
           visit tasks_path
-          expect(all("tbody tr").first).to have_content I18n.l(@task_created_after.created_at)
+          expect(all("tbody tr").first).to have_content I18n.l(@task_created_after.created_at, format: :medium)
         end
       end
       context "終了期限ソートリンクをクリックした場合" do
@@ -81,7 +81,7 @@ RSpec.describe 'タスク管理機能', type: :system do
           visit tasks_path
           find("#sort-expired").click_on(I18n.t("tasks.index.sort"))
           sleep(0.1) #遷移が早すぎてdomが読み込まれる前にチェックされてしまうようなので0.1secスリープする
-          expect(all("tbody tr").first).to have_content I18n.l(@task_expired_after.expired_at)
+          expect(all("tbody tr").first).to have_content I18n.l(@task_expired_after.expired_at, format: :medium)
         end
       end
       context "優先順位ソートリンクをクリックした場合" do

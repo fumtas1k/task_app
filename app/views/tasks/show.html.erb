@@ -1,35 +1,34 @@
 <% provide(:title, t(".title")) %>
 <h1><%= t ".title" %></h1>
-<table class="task-show-container">
+<table class="task-show-container table">
   <tr class="task-item">
-    <th class="scope"><%= t "tasks.name" %></th>
+    <th class="scope" scope="row"><%= t "tasks.name" %></th>
     <td><%= @task.name %></td>
   </tr>
   <tr class="task-item">
-    <th class="scope"><%= t "tasks.description" %></th>
+    <th class="scope" scope="row"><%= t "tasks.description" %></th>
     <td><%= simple_format h(@task.description) %></td>
   </tr>
-  <tr class="task-item">
+  <tr class="task-item" scope="row">
     <th class="scope"><%= t "tasks.expired_at" %></th>
-    <td><%= l @task.expired_at %></td>
+    <td><%= l @task.expired_at, format: :long %></td>
   </tr>
-  <tr class="task-item">
+  <tr class="task-item" scope="row">
     <th class="scope"><%= t "tasks.status.title" %></th>
-    <td><%= t "tasks.status.#{@task.status}" %></td>
+    <td class=<%= set_status_color(@task.status) %>><%= t "tasks.status.#{@task.status}" %></td>
   </tr>
-  <tr class="task-item">
+  <tr class="task-item" scope="row">
     <th class="scope"><%= t "tasks.priority.title" %></th>
-    <td><%= t "tasks.priority.#{@task.priority}" %></td>
+    <td class=<%= set_priority_color(@task.priority)%>><%= t "tasks.priority.#{@task.priority}" %></td>
   </tr>
-  <tr class="task-item">
+  <tr class="task-item" scope="row">
     <th class="scope"><%= t "tasks.created_at" %></th>
-    <td><%= l @task.created_at %></td>
+    <td><%= l @task.created_at, format: :long %></td>
   </tr>
-  <tr class= "task-item">
+  <tr class= "task-item" scope="row">
     <th class="scope"><%= t "tasks.updated_at" %></th>
-    <td><%= l @task.updated_at %></td>
+    <td><%= l @task.updated_at, format: :long %></td>
   </tr>
 </table>
-<%= link_to t("tasks.index.title"), tasks_path, class: "btn btn-outline-info" %>
 <%= link_to t("tasks.edit.title"), edit_task_path(@task), class: "btn btn-outline-success" %>
 <%= link_to t("tasks.delete.title"), task_path(@task), class: "btn btn-outline-danger", method: :delete, data: {confirm: t("tasks.delete.confirmation")} %>
