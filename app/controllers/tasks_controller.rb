@@ -1,7 +1,15 @@
 class TasksController < ApplicationController
   before_action :set_task, only: %i[show edit update destroy]
+  helper_method :sort_column, :sort_direction
+
   def index
-    @tasks = Task.all.order(created_at: :desc)
+    @tasks = if params[:clear] || params[:task].nil?
+      @search_params = nil
+      Task.change_sort(sort_column, sort_direction).page(params[:page])
+    else
+      @search_params = {task: search_params}
+      @tasks = Task.search(search_params[:name], search_params[:status]).change_sort(sort_column, sort_direction).page(params[:page])
+    end
   end
 
   def show
@@ -42,10 +50,22 @@ class TasksController < ApplicationController
 
   private
   def task_params
-    params.require(:task).permit(:name, :description)
+    params.require(:task).permit(:name, :description, :expired_at, :status, :priority)
   end
 
   def set_task
     @task = Task.find(params[:id])
+  end
+
+  def search_params
+    params.require(:task).permit(:name, :status)
+  end
+
+  def sort_column
+    Task.column_names.include?(params[:column]) ? params[:column] : "created_at"
+  end
+
+  def sort_direction
+    %w[asc desc].include?(params[:direction]) ? params[:direction] : "desc"
   end
 end

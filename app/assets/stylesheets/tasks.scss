@@ -1,3 +1,64 @@
-// Place all the styles related to the Tasks controller here.
-// They will automatically be included in application.css.
-// You can use Sass (SCSS) here: https://sass-lang.com/
+.font_red {
+  color: red;
+}
+.font_orange {
+  color: orange;
+}
+.font_blue {
+  color: blue;
+}
+.font_green {
+  color: green;
+}
+
+// index 検索nav
+.tasks-table {
+  th {
+    min-width: 105px;
+    vertical-align: middle;
+  }
+  td {
+    max-width: 300px;
+  }
+  td p {
+    max-width: 300px;
+    max-height: 130px;
+    overflow-y: scroll;
+  }
+  .tasks-sort a {
+    display: inline-block;
+    color: inherit;
+    padding: 0 5px;
+    border-radius: 5px;
+    background-color: rgba(200, 200, 200, 0.5);
+    &:hover {
+      text-decoration: none;
+      color: inherit;
+      background-color: rgb(200, 200, 200);
+    }
+  }
+}
+.to-index-top {
+  display: inline-block;
+  margin-bottom: 5px;
+}
+// form
+.task-form-container {
+  max-width: 500px;
+  margin: auto;
+  textarea {
+    min-height: 150px;
+  }
+  label.task-form-label {
+    display: inline-block;
+    width: 100px;
+    text-align: left;
+  }
+}
+
+// show
+.task-show-container {
+  .scope {
+    width: 110px;
+  }
+}

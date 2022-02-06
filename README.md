@@ -12,22 +12,12 @@
 | key | column | type |
 |-----|--------|------|
 | PK | id | integer |
-| FK1 | user_id | integer |
-| FK2 | priority_id | integer |
-| FK3 | status_id | integer |
+| FK | user_id | integer |
 | - | name | string |
 | - | description | text |
-| - | deadline | date |
-### Priority
-| key | column | type |
-|-----|--------|------|
-| PK | id | integer |
-| - | name | string |
-### Status
-| key | column | type |
-|-----|--------|------|
-| PK | id | integer |
-| - | name | string |
+| - | expired_at | datetime |
+| - | priority | integer |
+| - | status | integer |
 ### Label
 | key | column | type |
 |-----|--------|------|
