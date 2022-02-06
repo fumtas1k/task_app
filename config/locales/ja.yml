@@ -90,13 +90,23 @@ ja:
       title: プロフィール編集
       btn: 編集
     show:
-      title: プロフィール
+      title: マイページ
     update:
       message: プロフィールを更新しました。
     destroy:
       confirmation: 本当に退会しますか?
       message: 退会しました。
       btn: 退会
+  sessions:
+    new:
+      title: ログイン
+      btn: ログイン
+    create:
+      message: ログインしました。
+      caution: メールアドレス and/or パスワードが違います。
+    destroy:
+      title: ログアウト
+      message: ログアウトしました。
   views:
     pagination:
       first: 最初

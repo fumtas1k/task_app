@@ -1,6 +1,6 @@
 <div class="user-form-container">
   <h1><%= yield(:title) %></h1>
-  <%= form_with(model: user, local: true, class: "signup-form") do |form| %>
+  <%= form_with(model: user, local: true, class: "user-form") do |form| %>
     <% if user.errors.any? %>
       <div class="alert alert-danger" id="error_explanation">
         <h4><%= pluralize(user.errors.count, t("tasks.errors.error")) + t("tasks.errors.message") %></h4>

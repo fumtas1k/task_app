@@ -32,6 +32,12 @@ RSpec.describe User, type: :system do
 
   describe "ユーザー一覧機能" do
     context "ユーザー一覧画面に遷移した場合" do
+      before do
+        visit new_session_path
+        fill_in "session_email", with: first_user.email
+        fill_in "session_password", with: first_user.password
+        click_on I18n.t("sessions.new.btn")
+      end
       it "登録済みのユーザー一覧が表示される" do
         visit users_path
         expect(page).to have_content first_user.email, count: 1
@@ -40,6 +46,12 @@ RSpec.describe User, type: :system do
   end
 
   describe "プロフィール機能" do
+    before do
+      visit new_session_path
+      fill_in "session_email", with: first_user.email
+      fill_in "session_password", with: first_user.password
+      click_on I18n.t("sessions.new.btn")
+    end
     context "任意のユーザー画面に遷移した場合" do
       it "該当のユーザーメールアドレスが表示される" do
         visit user_path(first_user)
@@ -51,13 +63,19 @@ RSpec.describe User, type: :system do
   describe "ユーザー編集機能" do
     let(:edit_user) { FactoryBot.create(:user, name: before_name) }
     before do
-      visit edit_user_path(edit_user)
-      fill_in "user_name", with: after_name
-      click_on I18n.t("helpers.submit.update")
+      visit new_session_path
+      fill_in "session_email", with: edit_user.email
+      fill_in "session_password", with: edit_user.password
+      click_on I18n.t("sessions.new.btn")
     end
     context "ユーザーの名前を変更した場合" do
       let(:before_name) { "新渡戸稲造" }
       let(:after_name) { "樋口一葉" }
+      before do
+        visit edit_user_path(edit_user)
+        fill_in "user_name", with: after_name
+        click_on I18n.t("helpers.submit.update")
+      end
       it "プロフィール画面にリダイレクトし、更新した旨が表示される" do
         expect(current_path).to eq user_path(edit_user)
         expect(page).to have_content I18n.t("users.update.message")
@@ -72,6 +90,12 @@ RSpec.describe User, type: :system do
   end
 
   describe "ユーザー退会機能" do
+    before do
+      visit new_session_path
+      fill_in "session_email", with: first_user.email
+      fill_in "session_password", with: first_user.password
+      click_on I18n.t("sessions.new.btn")
+    end
     context "ユーザー退会ボタンを押した場合" do
       it "ユーザーが削除されSign Upページにリダイレクトしメッセージが表示される" do
         visit user_path(first_user)
