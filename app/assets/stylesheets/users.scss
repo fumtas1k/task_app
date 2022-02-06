@@ -29,12 +29,12 @@
 // index
 .users-container {
   margin-top: 10px;
+  width: 100%;
   display: grid;
   gap: 20px;
-  grid-template-columns: repeat(auto-fit, min-max(335px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(300px, 350px));
 }
 .user-container {
-  max-width: 300px;
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 5px;
