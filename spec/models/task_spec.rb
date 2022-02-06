@@ -1,43 +1,43 @@
 require 'rails_helper'
 describe 'タスクモデル機能', type: :model do
-  let(:expired_at) { 3.days.after }
+  let!(:author) { FactoryBot.create(:user) }
   describe 'バリデーションのテスト' do
-    context 'タスクの名前が空の場合' do
-      it 'バリデーションにひっかる' do
-        task = Task.new(name: '', description: '失敗テスト', expired_at: expired_at )
-        expect(task).not_to be_valid
-      end
-    end
-    context 'タスクの詳細が空の場合' do
-      it 'バリデーションにひっかかる' do
-        task = Task.new(name: "失敗テスト", description: "", expired_at: expired_at)
-        expect(task).not_to be_valid
-      end
-    end
-    context 'タスクの期限が空の場合' do
-      it 'バリデーションにひっかかる' do
-        task = Task.new(name: "失敗テスト", description: "失敗テスト", expired_at: nil)
-        expect(task).not_to be_valid
-      end
-    end
-    context "タスクの名前が31文字の場合" do
-      it "バリデーションにひっかかる" do
-        task = Task.new(name: "a" * 31, description: "失敗テスト", expired_at: expired_at)
-        expect(task).not_to be_valid
-      end
+    let(:task) { FactoryBot.build(:task) }
+    shared_examples "バリデーションに引っかかる" do
+      it { expect(task).not_to be_valid }
     end
     context 'タスクのタイトルと詳細に内容が記載されている場合' do
-      it 'バリデーションが通る' do
-        task = Task.new(name: "成功テスト", description: "成功テスト", expired_at: expired_at)
+      it "バリデーションが通る" do
         expect(task).to be_valid
       end
+    end
+    context 'タスクの名前が空の場合' do
+      before { task.name = "" }
+      it_behaves_like "バリデーションに引っかかる"
+    end
+    context 'タスクの詳細が空の場合' do
+      before { task.description = "" }
+      it_behaves_like "バリデーションに引っかかる"
+    end
+    context 'タスクの期限が空の場合' do
+      before { task.expired_at = nil }
+      it_behaves_like "バリデーションに引っかかる"
+    end
+    context "タスクの名前が31文字の場合" do
+      before { task.name = "a" * 31 }
+      it_behaves_like "バリデーションに引っかかる"
+    end
+    context "ユーザーが空の場合" do
+      before { task.user = nil }
+      it_behaves_like "バリデーションに引っかかる"
     end
   end
 
   describe "検索機能" do
-    let!(:task) { FactoryBot.create(:task, name: "task", status: Task.statuses.keys[0]) }
-    let!(:second_task) { FactoryBot.create(:task, name: "sample", status: Task.statuses.keys[0]) }
-    let!(:third_task) { FactoryBot.create(:task, name: "sample", status: Task.statuses.keys[1])}
+    let!(:author) { FactoryBot.create(:user) }
+    let!(:task) { FactoryBot.create(:task, name: "task", status: Task.statuses.keys[0], user: author ) }
+    let!(:second_task) { FactoryBot.create(:task, name: "sample", status: Task.statuses.keys[0], user: author) }
+    let!(:third_task) { FactoryBot.create(:task, name: "sample", status: Task.statuses.keys[1], user: author ) }
     let(:task_search) { Task.search(name, status_num)}
     context "scopeメソッドでタイトルのあいまい検索をした場合" do
       let(:name) { task.name }

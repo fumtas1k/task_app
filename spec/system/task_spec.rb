@@ -1,13 +1,14 @@
 require 'rails_helper'
 RSpec.describe 'タスク管理機能', type: :system do
-  let!(:first_user) { FactoryBot.create(:user, name: "最初のユーザー", email: "example01@diver.com", password: "password", password_confirmation: "password") }
+  let!(:login_user) { FactoryBot.create(:user, name: "ログインユーザー", email: "login@diver.com", password: "password", password_confirmation: "password") }
+  let!(:other_user) { FactoryBot.create(:user) }
   before do
     visit new_session_path
-    fill_in "session_email", with: first_user.email
-    fill_in "session_password", with: first_user.password
+    fill_in "session_email", with: login_user.email
+    fill_in "session_password", with: login_user.password
     click_on I18n.t("sessions.new.btn")
   end
-  let!(:task01) { FactoryBot.create(:task, name: "1つ目のタスク", description: "1番目の仕事") }
+  let!(:task01) { FactoryBot.create(:task, name: "1つ目のタスク", description: "1番目の仕事", user: login_user) }
   describe '新規作成機能' do
     before do
       visit new_task_path
@@ -53,11 +54,15 @@ RSpec.describe 'タスク管理機能', type: :system do
   describe '一覧表示機能' do
     context '一覧画面に遷移した場合' do
       before do
-        @task03 = FactoryBot.create(:task, name: "3つ目のタスク", description: "3番目の仕事")
+        @task03 = FactoryBot.create(:task, name: "3つ目のタスク", description: "3番目の仕事", user: login_user)
+        @task_other = FactoryBot.create(:task, name: "他人のタスク", description: "他人の仕事", user: other_user)
         visit tasks_path
       end
-      it '作成済みのタスク一覧が表示される' do
+      it 'ログインユーザーの作成済みのタスク一覧が表示される' do
         expect(page).to have_content @task03.name
+      end
+      it "他のユーザーの作成済みのタスクは表示されない" do
+        expect(page).not_to have_content @task_other.name
       end
     end
     describe "ソート機能" do
@@ -69,14 +74,14 @@ RSpec.describe 'タスク管理機能', type: :system do
         task_count.times do |i|
           if i == 1
             # ソート：登録日時ソートの検証に使用
-            @task_created_after = FactoryBot.create(:task, created_at: 1.years.after, priority: task_priority_low)
+            @task_created_after = FactoryBot.create(:task, created_at: 1.years.after, priority: task_priority_low, user: login_user)
           elsif i == 2
             # ソート：終了期限ソートの検証に使用
-            @task_expired_after = FactoryBot.create(:task, expired_at: 1.years.after, priority: task_priority_low)
+            @task_expired_after = FactoryBot.create(:task, expired_at: 1.years.after, priority: task_priority_low, user: login_user)
           elsif i == 3
-            @task_priority_high = FactoryBot.create(:task, priority: task_priority_high)
+            @task_priority_high = FactoryBot.create(:task, priority: task_priority_high, user: login_user)
           else
-            FactoryBot.create(:task, priority: task_priority_low)
+            FactoryBot.create(:task, priority: task_priority_low, user: login_user)
           end
         end
       end
@@ -113,15 +118,15 @@ RSpec.describe 'タスク管理機能', type: :system do
         task_count.times do |i|
           if i == 1
             # タイトルあいまい検証に使用
-            @task_name1 = FactoryBot.create(:task, name: test_name + "タイトル", status: task_status)
+            @task_name1 = FactoryBot.create(:task, name: test_name + "タイトル", status: task_status, user: login_user)
           elsif i == 2
             # ステータス一致検証に使用
-            @task_expired_after = FactoryBot.create(:task, name: task_name, status: test_status)
+            @task_expired_after = FactoryBot.create(:task, name: task_name, status: test_status, user: login_user)
           elsif i == 3
             # タイトルあいまい、ステータス一致の検証に使用
-            @task_search = FactoryBot.create(:task, name: test_name, status: test_status)
+            @task_search = FactoryBot.create(:task, name: test_name, status: test_status, user: login_user)
           else
-            FactoryBot.create(:task, name: task_name, status: task_status)
+            FactoryBot.create(:task, name: task_name, status: task_status, user: login_user)
           end
         end
         visit tasks_path

@@ -6,5 +6,6 @@ FactoryBot.define do
     created_at { DateTime.now }
     status { Task.statuses.keys[0] }
     priority { Task.priorities.keys[0] }
+    user
   end
 end
