@@ -22,7 +22,7 @@ class TasksController < ApplicationController
   def create
     @task = Task.new(task_params)
     if @task.save
-      flash[:success] = "#{@task.name} #{t "tasks.new.message"}"
+      flash[:success] = "#{@task.name} #{t ".message"}"
       redirect_to @task
     else
       render :new
@@ -34,7 +34,7 @@ class TasksController < ApplicationController
 
   def update
     if @task.update(task_params)
-      flash[:success] = "#{@task.name} #{t "tasks.edit.message"}"
+      flash[:success] = "#{@task.name} #{t ".message"}"
       redirect_to @task
     else
       render :edit
@@ -44,7 +44,7 @@ class TasksController < ApplicationController
   def destroy
     task_name = @task.name
     @task.destroy
-    flash[:danger] = "#{task_name} #{t "tasks.delete.message"}"
+    flash[:danger] = "#{task_name} #{t ".message"}"
     redirect_to root_path
   end
 

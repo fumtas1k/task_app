@@ -45,7 +45,7 @@
           <td>
             <%= link_to t("tasks.show.title"), task_path(task), class: "btn btn-outline-primary btn-block" %>
             <%= link_to t("tasks.edit.title"), edit_task_path(task), class: "btn btn-outline-success btn-block" %>
-            <%= link_to t("tasks.delete.title"), task_path(task), class: "btn btn-outline-danger btn-block", method: :delete, data: {confirm: t("tasks.delete.confirmation")} %>
+            <%= link_to t("tasks.destroy.title"), task_path(task), class: "btn btn-outline-danger btn-block", method: :delete, data: {confirm: t("tasks.destroy.confirmation")} %>
           </td>
         </tr>
       <% end %>

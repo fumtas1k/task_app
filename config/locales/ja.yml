@@ -58,13 +58,15 @@ ja:
       clear: クリア
     new:
       title: 新規登録
+    create:
       message: を新規登録しました!
     show:
       title: 詳細
     edit:
       title: 編集
+    update:
       message: を編集しました!
-    delete:
+    destroy:
       title: 削除
       confirmation: 本当に削除しますか?
       message: を削除しました!
