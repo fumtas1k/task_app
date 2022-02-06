@@ -2,6 +2,7 @@ class UsersController < ApplicationController
   skip_before_action :login_required, only: %i[ new create ]
   before_action :logout_required, only: %i[ new create ]
   before_action :set_user, only: %i[ show edit update destroy ]
+  before_action :ensure_user_required, only: %i[ show edit update destroy ]
 
   def index
     @users = User.all
@@ -49,5 +50,8 @@ class UsersController < ApplicationController
   end
   def set_user
     @user = User.find(params[:id])
+  end
+  def ensure_user_required
+    redirect_to tasks_path if current_user != @user
   end
 end

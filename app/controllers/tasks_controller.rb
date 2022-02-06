@@ -1,6 +1,6 @@
 class TasksController < ApplicationController
   before_action :set_task, only: %i[show edit update destroy]
-  before_action :correct_user_required, only: %i[ show edit update destroy ]
+  before_action :author_required, only: %i[ show edit update destroy ]
   helper_method :sort_column, :sort_direction
 
   def index
@@ -58,7 +58,7 @@ class TasksController < ApplicationController
     @task = Task.find(params[:id])
   end
 
-  def correct_user_required
+  def author_required
     redirect_to tasks_path if current_user != Task.find_by(id: params[:id])&.user
   end
 

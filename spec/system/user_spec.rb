@@ -1,6 +1,7 @@
 require 'rails_helper'
 RSpec.describe User, type: :system do
-  let!(:first_user) { FactoryBot.create(:user, name: "最初のユーザー", email: "example01@diver.com", password: "password", password_confirmation: "password") }
+  let!(:login_user) { FactoryBot.create(:user, name: "ログインユーザー", email: "example01@diver.com", password: "password", password_confirmation: "password") }
+  let!(:other_user) { FactoryBot.create(:user, name: "他のユーザー", email: "other@diver.com", password: "password")}
   describe "Sign up機能" do
     before do
       visit users_path
@@ -42,13 +43,13 @@ RSpec.describe User, type: :system do
     context "ユーザー一覧画面に遷移した場合" do
       before do
         visit new_session_path
-        fill_in "session_email", with: first_user.email
-        fill_in "session_password", with: first_user.password
+        fill_in "session_email", with: login_user.email
+        fill_in "session_password", with: login_user.password
         click_on I18n.t("sessions.new.btn")
       end
-      it "登録済みのユーザー一覧が表示される" do
+      it "ユーザー一覧が表示される" do
         visit users_path
-        expect(page).to have_content first_user.email, count: 1
+        expect(page).to have_css ".user-container", count:2
       end
     end
   end
@@ -56,14 +57,21 @@ RSpec.describe User, type: :system do
   describe "プロフィール機能" do
     before do
       visit new_session_path
-      fill_in "session_email", with: first_user.email
-      fill_in "session_password", with: first_user.password
+      fill_in "session_email", with: login_user.email
+      fill_in "session_password", with: login_user.password
       click_on I18n.t("sessions.new.btn")
     end
-    context "任意のユーザー画面に遷移した場合" do
-      it "該当のユーザーメールアドレスが表示される" do
-        visit user_path(first_user)
-        expect(page).to have_content first_user.email
+    context "ログインユーザーのマイページに遷移した場合" do
+      it "ログインユーザーのメールアドレスが表示される" do
+        visit user_path(login_user)
+        expect(page).to have_content login_user.email
+      end
+    end
+    context "他のユーザーのマイページに遷移した場合" do
+      it "タスク一覧画面が表示される" do
+        visit user_path(other_user)
+        expect(current_path).to eq tasks_path
+        expect(page).to have_content I18n.t("tasks.index.title")
       end
     end
   end
@@ -100,13 +108,13 @@ RSpec.describe User, type: :system do
   describe "ユーザー退会機能" do
     before do
       visit new_session_path
-      fill_in "session_email", with: first_user.email
-      fill_in "session_password", with: first_user.password
+      fill_in "session_email", with: login_user.email
+      fill_in "session_password", with: login_user.password
       click_on I18n.t("sessions.new.btn")
     end
     context "ユーザー退会ボタンを押した場合" do
       it "ユーザーが削除されSign Upページにリダイレクトしメッセージが表示される" do
-        visit user_path(first_user)
+        visit user_path(login_user)
         expect {
           page.accept_confirm do
             click_on I18n.t("users.destroy.btn")
