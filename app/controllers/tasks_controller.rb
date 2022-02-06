@@ -61,16 +61,4 @@ class TasksController < ApplicationController
   def author_required
     redirect_to tasks_path if current_user != Task.find_by(id: params[:id])&.user
   end
-
-  def search_params
-    params.require(:task).permit(:name, :status)
-  end
-
-  def sort_column
-    Task.column_names.include?(params[:column]) ? params[:column] : "created_at"
-  end
-
-  def sort_direction
-    %w[asc desc].include?(params[:direction]) ? params[:direction] : "desc"
-  end
 end

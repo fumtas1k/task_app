@@ -53,6 +53,7 @@ ja:
       high: 高
     index:
       title: タスク一覧
+    table:
       sort: ソート
       search: 検索
       clear: クリア

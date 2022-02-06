@@ -94,7 +94,7 @@ RSpec.describe 'タスク管理機能', type: :system do
       context "終了期限ソートリンクをクリックした場合" do
         it "終了期限が最も未来のタスクが一番上に表示される" do
           visit tasks_path
-          find("#sort-expired").click_on(I18n.t("tasks.index.sort"))
+          find("#sort-expired").click_on(I18n.t("tasks.table.sort"))
           sleep(0.1) #遷移が早すぎてdomが読み込まれる前にチェックされてしまうようなので0.1secスリープする
           expect(all("tbody tr").first).to have_content I18n.l(@task_expired_after.expired_at, format: :medium)
         end
@@ -102,7 +102,7 @@ RSpec.describe 'タスク管理機能', type: :system do
       context "優先順位ソートリンクをクリックした場合" do
         it "優先順位が高(high)のタスクが一番上に表示される" do
           visit tasks_path
-          find("#sort-priority").click_on(I18n.t("tasks.index.sort"))
+          find("#sort-priority").click_on(I18n.t("tasks.table.sort"))
           sleep(0.1) #遷移が早すぎてdomが読み込まれる前にチェックされてしまうようなので0.1secスリープする
           expect(all("tbody tr").first).to have_content I18n.t("tasks.priority.#{task_priority_high}")
         end
@@ -132,7 +132,7 @@ RSpec.describe 'タスク管理機能', type: :system do
         visit tasks_path
         fill_in "task_name", with: search_name
         select search_status, from: "task_status"
-        click_on I18n.t("tasks.index.search")
+        click_on I18n.t("tasks.table.search")
       end
       context "タイトルであいまい検索をした場合" do
         let(:search_name) { test_name }

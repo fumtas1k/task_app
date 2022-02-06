@@ -1,5 +1,7 @@
 <% provide(:title, t(".title")) %>
 <h1><%= t ".title" %></h1>
+<%= link_to t("users.edit.btn"), edit_user_path(@user), class: "btn btn-outline-success" %>
+<%= link_to t("users.destroy.btn"), user_path(@user), class: "btn btn-outline-danger", method: :delete, data: {confirm: t("users.destroy.confirmation")} %>
 <table class="user-show-container table">
   <tr class="task-item">
     <th class="scope" scope="row"><%= t "users.name" %></th>
@@ -11,5 +13,6 @@
   </tr>
 </table>
 <hr>
-<%= link_to t("users.edit.btn"), edit_user_path(@user), class: "btn btn-outline-success" %>
-<%= link_to t("users.destroy.btn"), user_path(@user), class: "btn btn-outline-danger", method: :delete, data: {confirm: t("users.destroy.confirmation")} %>
+
+
+<%= render "tasks/table", tasks: @tasks, search_params: @search_params %>
