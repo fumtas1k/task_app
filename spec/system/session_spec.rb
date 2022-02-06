@@ -37,7 +37,17 @@ RSpec.describe :Session, type: :system do
         expect(page).to have_content I18n.t("sessions.new.title")
       end
     end
+    context "ログインした状態でログイン画面にアクセスしようとした場合" do
+      let(:first_user_email) { first_user.email }
+      let(:first_user_password) { first_user.password }
+      it "root_pathにリダイレクトする" do
+        visit new_session_path
+        expect(current_path).to eq root_path
+        expect(page).to have_content I18n.t("tasks.index.title")
+      end
+    end
   end
+
   describe "ログアウト機能" do
 
     before do

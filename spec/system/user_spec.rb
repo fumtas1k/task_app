@@ -7,8 +7,8 @@ RSpec.describe User, type: :system do
       visit new_user_path
       fill_in "user_name", with: user_new.name
       fill_in "user_email", with: user_new.email
-      fill_in "user_password", with: user_new.password #user_password
-      fill_in "user_password_confirmation", with: user_new.password_confirmation #user_password_confirmation
+      fill_in "user_password", with: user_new.password
+      fill_in "user_password_confirmation", with: user_new.password_confirmation
       click_on I18n.t("helpers.submit.create")
     end
 
@@ -26,6 +26,14 @@ RSpec.describe User, type: :system do
         within "#error_explanation" do
           expect(page).to have_content I18n.t("users.password")
         end
+      end
+    end
+    context "signup(login)した状態でsignupページにアクセスした場合" do
+      let!(:user_new) { FactoryBot.build(:user) }
+      it "root_pathにリダイレクトされる" do
+        visit new_user_path
+        expect(current_path).to eq root_path
+        expect(page).to have_content I18n.t("tasks.index.title")
       end
     end
   end
