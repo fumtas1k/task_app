@@ -1,0 +1,35 @@
+<div class="user-form-container">
+  <h1><%= yield(:title) %></h1>
+  <%= form_with(model: user, local: true, class: "signup-form") do |form| %>
+    <% if user.errors.any? %>
+      <div class="alert alert-danger" id="error_explanation">
+        <h4><%= pluralize(user.errors.count, t("tasks.errors.error")) + t("tasks.errors.message") %></h4>
+        <ul>
+          <% user.errors.full_messages.each do |msg| %>
+            <li><%= msg%></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+    <div class="form-group">
+      <%= form.label :name, class: "sr-only" %>
+      <%= form.text_field :name, class: "form-control", placeholder: t("users.name"), required: true, autofocus: true %>
+    </div>
+    <div class="form-group">
+      <%= form.label :email, class: "sr-only" %>
+      <%= form.email_field :email, placeholder: t("users.email"), class: "form-control", required: true %>
+    </div>
+    <div class="form-group">
+      <%= form.label :password, class: "sr-only" %>
+      <%= form.password_field :password, placeholder: t("users.password"), class: "form-control" %>
+    </div>
+    <div class="form-group">
+      <%= form.label :password_confirmation, class: "sr-only" %>
+      <%= form.password_field :password_confirmation, placeholder: t("users.password_confirmation"), class: "form-control" %>
+    </div>
+    <%= form.submit nil, class: "btn btn-primary btn-block" %>
+  <% end %>
+  <% if yield(:title) == t("users.new.title") %>
+    <p>登録することで、task appの利用規約、データに関するポリシー、cookieポリシーに同意するものとします。</p>
+  <% end %>
+</div>

@@ -4,6 +4,7 @@
     <title><%= yield(:title) %></title>
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
+    <meta name="viewport" content="device-widh, initial-scale=1.0">
 
     <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= stylesheet_pack_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
@@ -30,7 +31,7 @@
                 my account
               </a>
               <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                <a class="dropdown-item" href="#">Profile</a>
+                <%= link_to "profile", "#", class: "dropdown-item" %>
                 <a class="dropdown-item" href="#">edit</a>
                 <a class="dropdown-item" href="#">logout</a>
               </div>

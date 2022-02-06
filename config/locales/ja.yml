@@ -9,6 +9,7 @@ ja:
           has_many: "%{record}が存在しているので削除できません"
     models:
       task: タスク
+      user: ユーザー
     attributes:
       task:
         name: タイトル
@@ -26,6 +27,13 @@ ja:
           low: 低
           medium: 中
           high: 高
+      user:
+        name: 名前
+        email: メールアドレス
+        password: パスワード
+        password_confirmation: 確認用パスワード
+        created_at: 登録日時
+        updated_at: 更新日時
   tasks:
     name: タイトル
     description: 詳細説明
@@ -63,6 +71,30 @@ ja:
     errors:
       error: 件
       message: のエラーがあります。
+  users:
+    name: 名前
+    email: メールアドレス
+    password: パスワード
+    password_confirmation: 確認用パスワード
+    created_at: 登録日時
+    updated_at: 更新日時
+    index:
+      title: ユーザー一覧
+    new:
+      title: Sign Up
+    create:
+      message: アカウント登録しました。
+    edit:
+      title: プロフィール編集
+      btn: 編集
+    show:
+      title: プロフィール
+    update:
+      message: プロフィールを更新しました。
+    destroy:
+      confirmation: 本当に退会しますか?
+      message: 退会しました。
+      btn: 退会
   views:
     pagination:
       first: 最初

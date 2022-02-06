@@ -1,0 +1,58 @@
+// form, new
+.user-form-container {
+  max-width: 500px;
+  margin: 10px auto 0px;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  text-align: center;
+  ul {
+    text-align: left;
+  }
+  span {
+    vertical-align: middle;
+  }
+  p {
+    margin-top: 10px;
+    margin-bottom: 0;
+    text-align: left;
+  }
+}
+
+// show
+.user-show-container {
+  .scope {
+    width: 150px;
+  }
+}
+
+// index
+.users-container {
+  margin-top: 10px;
+  display: grid;
+  gap: 20px;
+  grid-template-columns: repeat(auto-fit, min-max(335px, 1fr));
+}
+.user-container {
+  max-width: 300px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  &:hover {
+    background-color: rgb(242, 244, 250);
+  }
+  a {
+    color: inherit;
+    &:hover {
+      color: inherit;
+      text-decoration: none;
+    }
+  }
+}
+.user-item {
+  display: flex;
+  flex-direction: column;
+  span {
+    overflow-wrap: break-word;
+  }
+}
