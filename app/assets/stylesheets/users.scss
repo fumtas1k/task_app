@@ -32,14 +32,14 @@
   width: 100%;
   display: grid;
   gap: 20px;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 350px));
+  grid-template-columns: repeat(auto-fit, minmax(300px, 325px));
 }
 .user-container {
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 5px;
   &:hover {
-    background-color: rgb(242, 244, 250);
+    background-color: rgb(250, 249, 242);
   }
   a {
     color: inherit;
@@ -50,9 +50,12 @@
   }
 }
 .user-item {
-  display: flex;
-  flex-direction: column;
+  list-style: none;
+  padding: 10px;
   span {
     overflow-wrap: break-word;
+  }
+  li.task-counts {
+    text-align: right;
   }
 }

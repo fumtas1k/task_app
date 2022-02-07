@@ -1,0 +1,14 @@
+.users-table {
+  th {
+    min-width: 105px;
+    vertical-align: middle;
+  }
+  td {
+    max-width: 300px;
+  }
+  td p {
+    max-width: 300px;
+    max-height: 130px;
+    overflow-y: scroll;
+  }
+}

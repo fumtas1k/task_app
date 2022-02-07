@@ -27,6 +27,7 @@ ja:
           low: 低
           medium: 中
           high: 高
+        admin: 管理者
       user:
         name: 名前
         email: メールアドレス
@@ -41,6 +42,8 @@ ja:
     created_at: 登録日時
     updated_at: 更新日時
     link: リンク
+    count: タスク件数
+    user_name: 作成者
     status:
       title: ステータス
       todo: 未着手
@@ -75,6 +78,7 @@ ja:
       error: 件
       message: のエラーがあります。
   users:
+    id: ID
     name: 名前
     email: メールアドレス
     password: パスワード
@@ -108,6 +112,25 @@ ja:
     destroy:
       title: ログアウト
       message: ログアウトしました。
+  admin:
+    users:
+      index:
+        title: ユーザー管理画面
+      show:
+        btn: 詳細
+      new:
+        title: ユーザー新規登録
+      create:
+        message: アカウント登録しました。
+      edit:
+        title: ユーザー編集
+        btn: 編集
+      update:
+        message: プロフィールを更新しました。
+      destroy:
+        confirmation: 本当に削除しますか?
+        message: 削除しました。
+        btn: 削除
   views:
     pagination:
       first: 最初

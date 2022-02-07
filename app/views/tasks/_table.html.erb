@@ -13,7 +13,8 @@
       <tr>
         <th scope="col"><%= t "tasks.name" %></th>
         <th scope="col"><%= t "tasks.description" %></th>
-        <th class="tasks-sort" id="sort-expired">
+        <th scope="col"><%= t "tasks.user_name" %></th>
+        <th class="tasks-sort" id="sort-expired" scope="col">
           <%= t "tasks.expired_at" %>
           <br><%= sort_by("expired_at" ,t(".sort"), search_params) %>
         </th>
@@ -36,6 +37,7 @@
         <tr>
           <td><p><%= task.name %></p></td>
           <td><%= simple_format h(task.description) %></td>
+          <td><%= task.user.name %></td>
           <td><%= l task.expired_at, format: :medium %></td>
           <td><%= l task.created_at, format: :medium %></td>
           <td class=<%= set_status_color(task.status) %>><%= t "tasks.status.#{task.status}" %></td>
