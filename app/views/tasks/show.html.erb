@@ -9,24 +9,24 @@
     <th class="scope" scope="row"><%= t "tasks.description" %></th>
     <td><%= simple_format h(@task.description) %></td>
   </tr>
-  <tr class="task-item" scope="row">
-    <th class="scope"><%= t "tasks.expired_at" %></th>
+  <tr class="task-item">
+    <th class="scope"  scope="row"><%= t "tasks.expired_at" %></th>
     <td><%= l @task.expired_at, format: :long %></td>
   </tr>
-  <tr class="task-item" scope="row">
-    <th class="scope"><%= t "tasks.status.title" %></th>
+  <tr class="task-item">
+    <th class="scope" scope="row"><%= t "tasks.status.title" %></th>
     <td class=<%= set_status_color(@task.status) %>><%= t "tasks.status.#{@task.status}" %></td>
   </tr>
-  <tr class="task-item" scope="row">
-    <th class="scope"><%= t "tasks.priority.title" %></th>
+  <tr class="task-item">
+    <th class="scope" scope="row"><%= t "tasks.priority.title" %></th>
     <td class=<%= set_priority_color(@task.priority)%>><%= t "tasks.priority.#{@task.priority}" %></td>
   </tr>
-  <tr class="task-item" scope="row">
-    <th class="scope"><%= t "tasks.created_at" %></th>
+  <tr class="task-item">
+    <th class="scope" scope="row"><%= t "tasks.created_at" %></th>
     <td><%= l @task.created_at, format: :long %></td>
   </tr>
-  <tr class= "task-item" scope="row">
-    <th class="scope"><%= t "tasks.updated_at" %></th>
+  <tr class= "task-item">
+    <th class="scope"  scope="row"><%= t "tasks.updated_at" %></th>
     <td><%= l @task.updated_at, format: :long %></td>
   </tr>
 </table>
