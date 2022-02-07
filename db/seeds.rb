@@ -1,6 +1,13 @@
 user_n = 10
 task_n = 3
 
+User.create!(
+  name: "adminuser",
+  email: "adminuser@diver.com",
+  password: "password",
+  admin: true,
+)
+
 user_n.times do
   user = User.create!(
     name: Faker::Name.name,

@@ -2,7 +2,7 @@ class UsersController < ApplicationController
   skip_before_action :login_required, only: %i[ new create ]
   before_action :logout_required, only: %i[ new create ]
   before_action :set_user, only: %i[ show edit update destroy ]
-  before_action :ensure_user_required, only: %i[ show edit update destroy ]
+  before_action :ensure_user_or_admin_required, only: %i[ show edit update destroy ]
   helper_method :sort_column, :sort_direction
 
   def index
@@ -59,7 +59,7 @@ class UsersController < ApplicationController
   def set_user
     @user = User.find(params[:id])
   end
-  def ensure_user_required
-    redirect_to tasks_path if current_user != @user
+  def ensure_user_or_admin_required
+    redirect_to tasks_path unless current_user == @user || current_user.admin?
   end
 end

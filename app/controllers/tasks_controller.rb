@@ -1,15 +1,23 @@
 class TasksController < ApplicationController
   before_action :set_task, only: %i[show edit update destroy]
-  before_action :author_required, only: %i[ show edit update destroy ]
+  before_action :author_or_admin_required, only: %i[ show edit update destroy ]
   helper_method :sort_column, :sort_direction
 
   def index
     @tasks = if params[:clear] || params[:task].nil?
       @search_params = nil
-      current_user.tasks.change_sort(sort_column, sort_direction).page(params[:page])
+      if current_user.admin?
+        Task.includes(:user).change_sort(sort_column, sort_direction).page(params[:page])
+      else
+        current_user.tasks.change_sort(sort_column, sort_direction).page(params[:page])
+      end
     else
       @search_params = {task: search_params}
-      current_user.tasks.search(search_params[:name], search_params[:status]).change_sort(sort_column, sort_direction).page(params[:page])
+      if current_user.admin?
+        Task.includes(:user).search(search_params[:name], search_params[:status]).change_sort(sort_column, sort_direction).page(params[:page])
+      else
+        current_user.tasks.search(search_params[:name], search_params[:status]).change_sort(sort_column, sort_direction).page(params[:page])
+      end
     end
   end
 
@@ -58,7 +66,8 @@ class TasksController < ApplicationController
     @task = Task.find(params[:id])
   end
 
-  def author_required
-    redirect_to tasks_path if current_user != Task.find_by(id: params[:id])&.user
+  def author_or_admin_required
+    @user = Task.find_by(id: params[:id])&.user
+    redirect_to tasks_path unless current_user == @user || current_user.admin?
   end
 end

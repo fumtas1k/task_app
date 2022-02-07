@@ -27,7 +27,6 @@ ja:
           low: 低
           medium: 中
           high: 高
-        admin: 管理者
       user:
         name: 名前
         email: メールアドレス
@@ -35,6 +34,7 @@ ja:
         password_confirmation: 確認用パスワード
         created_at: 登録日時
         updated_at: 更新日時
+        admin: 管理者
   tasks:
     name: タイトル
     description: 詳細説明
@@ -83,6 +83,7 @@ ja:
     email: メールアドレス
     password: パスワード
     password_confirmation: 確認用パスワード
+    admin: 管理者
     created_at: 登録日時
     updated_at: 更新日時
     index:
@@ -127,9 +128,11 @@ ja:
         btn: 編集
       update:
         message: プロフィールを更新しました。
+        caution: 管理者が1人しかいないため変更できません。
       destroy:
         confirmation: 本当に削除しますか?
         message: 削除しました。
+        caution: 管理者が1人しかいないため削除できません。
         btn: 削除
   views:
     pagination:

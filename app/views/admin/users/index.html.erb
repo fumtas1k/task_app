@@ -9,6 +9,7 @@
         <th scope="col"><%= t "users.name" %></th>
         <th scope="col"><%= t "users.email" %></th>
         <th scope="col"><%= t "tasks.count" %></th>
+        <th scope="col"><%= t "users.admin" %></th>
         <th scope="col"><%= t "users.created_at" %></th>
         <th scope="col"><%= t "users.updated_at" %></th>
         <th scope="col"><%= t "tasks.link" %></th>
@@ -21,6 +22,7 @@
           <td><p><%= user.name %></p></td>
           <td><%= simple_format h(user.email) %></td>
           <td><%= user.tasks.count %></td>
+          <td><%= user.admin %></td>
           <td><%= l user.created_at, format: :medium %></td>
           <td><%= l user.updated_at, format: :medium %></td>
           <td>

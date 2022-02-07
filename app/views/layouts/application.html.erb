@@ -21,6 +21,11 @@
           </button>
           <div class="collapse navbar-collapse" id="navbarNavDropdown">
             <ul class="navbar-nav">
+              <% if current_user.admin? %>
+                <li class="nav-item <%= color_activate(t("admin.users.index.title"), yield(:title))%>">
+                  <%= link_to t("admin.users.index.title"), admin_users_path, class: "nav-link" %>
+                </li>
+              <% end %>
               <li class="nav-item <%= color_activate(t("tasks.index.title"), yield(:title))%>">
                 <%= link_to t("tasks.index.title"), tasks_path, class: "nav-link" %>
               </li>
@@ -33,7 +38,6 @@
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                   <%= link_to t("users.show.title"), user_path(current_user), class: "dropdown-item" %>
-                  <%= link_to t("users.edit.title"), edit_user_path(current_user), class: "dropdown-item" %>
                   <%= link_to t("sessions.destroy.title"), session_path(current_user.id), method: :delete, class: "dropdown-item" %>
                 </div>
               </li>
