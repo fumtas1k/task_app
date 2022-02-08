@@ -1,8 +1,8 @@
 class UsersController < ApplicationController
   skip_before_action :login_required, only: %i[ new create ]
   before_action :logout_required, only: %i[ new create ]
-  before_action :set_user, only: %i[ show edit update destroy ]
-  before_action :ensure_user_or_admin_required, only: %i[ show edit update destroy ]
+  before_action :set_user, only: %i[ show ] # edit update destroy は抜いた
+  before_action :ensure_user_or_admin_required, only: %i[ show ] #edit update destroy は抜いた
   helper_method :sort_column, :sort_direction
 
   def index
