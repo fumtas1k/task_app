@@ -1,14 +1,23 @@
 class TasksController < ApplicationController
   before_action :set_task, only: %i[show edit update destroy]
+  before_action :author_or_admin_required, only: %i[ show edit update destroy ]
   helper_method :sort_column, :sort_direction
 
   def index
     @tasks = if params[:clear] || params[:task].nil?
       @search_params = nil
-      Task.change_sort(sort_column, sort_direction).page(params[:page])
+      if current_user.admin?
+        Task.includes(:user).change_sort(sort_column, sort_direction).page(params[:page])
+      else
+        current_user.tasks.change_sort(sort_column, sort_direction).page(params[:page])
+      end
     else
       @search_params = {task: search_params}
-      @tasks = Task.search(search_params[:name], search_params[:status]).change_sort(sort_column, sort_direction).page(params[:page])
+      if current_user.admin?
+        Task.includes(:user).search(search_params[:name], search_params[:status]).change_sort(sort_column, sort_direction).page(params[:page])
+      else
+        current_user.tasks.search(search_params[:name], search_params[:status]).change_sort(sort_column, sort_direction).page(params[:page])
+      end
     end
   end
 
@@ -16,13 +25,13 @@ class TasksController < ApplicationController
   end
 
   def new
-    @task = Task.new
+    @task = current_user.tasks.build
   end
 
   def create
-    @task = Task.new(task_params)
+    @task = current_user.tasks.build(task_params)
     if @task.save
-      flash[:success] = "#{@task.name} #{t "tasks.new.message"}"
+      flash[:success] = "#{@task.name} #{t ".message"}"
       redirect_to @task
     else
       render :new
@@ -34,7 +43,7 @@ class TasksController < ApplicationController
 
   def update
     if @task.update(task_params)
-      flash[:success] = "#{@task.name} #{t "tasks.edit.message"}"
+      flash[:success] = "#{@task.name} #{t ".message"}"
       redirect_to @task
     else
       render :edit
@@ -44,7 +53,7 @@ class TasksController < ApplicationController
   def destroy
     task_name = @task.name
     @task.destroy
-    flash[:danger] = "#{task_name} #{t "tasks.delete.message"}"
+    flash[:danger] = "#{task_name} #{t ".message"}"
     redirect_to root_path
   end
 
@@ -57,15 +66,8 @@ class TasksController < ApplicationController
     @task = Task.find(params[:id])
   end
 
-  def search_params
-    params.require(:task).permit(:name, :status)
-  end
-
-  def sort_column
-    Task.column_names.include?(params[:column]) ? params[:column] : "created_at"
-  end
-
-  def sort_direction
-    %w[asc desc].include?(params[:direction]) ? params[:direction] : "desc"
+  def author_or_admin_required
+    @user = Task.find_by(id: params[:id])&.user
+    redirect_to tasks_path unless current_user == @user || current_user.admin?
   end
 end

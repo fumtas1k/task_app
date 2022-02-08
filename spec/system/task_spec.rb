@@ -1,6 +1,14 @@
 require 'rails_helper'
 RSpec.describe 'タスク管理機能', type: :system do
-  let!(:task01) { FactoryBot.create(:task, name: "1つ目のタスク", description: "1番目の仕事") }
+  let!(:login_user) { FactoryBot.create(:user, name: "ログインユーザー", email: "login@diver.com", password: "password", password_confirmation: "password") }
+  let!(:other_user) { FactoryBot.create(:user) }
+  before do
+    visit new_session_path
+    fill_in "session_email", with: login_user.email
+    fill_in "session_password", with: login_user.password
+    click_on I18n.t("sessions.new.btn")
+  end
+  let!(:task01) { FactoryBot.create(:task, name: "1つ目のタスク", description: "1番目の仕事", user: login_user) }
   describe '新規作成機能' do
     before do
       visit new_task_path
@@ -46,11 +54,15 @@ RSpec.describe 'タスク管理機能', type: :system do
   describe '一覧表示機能' do
     context '一覧画面に遷移した場合' do
       before do
-        @task03 = FactoryBot.create(:task, name: "3つ目のタスク", description: "3番目の仕事")
+        @task03 = FactoryBot.create(:task, name: "3つ目のタスク", description: "3番目の仕事", user: login_user)
+        @task_other = FactoryBot.create(:task, name: "他人のタスク", description: "他人の仕事", user: other_user)
         visit tasks_path
       end
-      it '作成済みのタスク一覧が表示される' do
+      it 'ログインユーザーの作成済みのタスク一覧が表示される' do
         expect(page).to have_content @task03.name
+      end
+      it "他のユーザーの作成済みのタスクは表示されない" do
+        expect(page).not_to have_content @task_other.name
       end
     end
     describe "ソート機能" do
@@ -62,14 +74,14 @@ RSpec.describe 'タスク管理機能', type: :system do
         task_count.times do |i|
           if i == 1
             # ソート：登録日時ソートの検証に使用
-            @task_created_after = FactoryBot.create(:task, created_at: 1.years.after, priority: task_priority_low)
+            @task_created_after = FactoryBot.create(:task, created_at: 1.years.after, priority: task_priority_low, user: login_user)
           elsif i == 2
             # ソート：終了期限ソートの検証に使用
-            @task_expired_after = FactoryBot.create(:task, expired_at: 1.years.after, priority: task_priority_low)
+            @task_expired_after = FactoryBot.create(:task, expired_at: 1.years.after, priority: task_priority_low, user: login_user)
           elsif i == 3
-            @task_priority_high = FactoryBot.create(:task, priority: task_priority_high)
+            @task_priority_high = FactoryBot.create(:task, priority: task_priority_high, user: login_user)
           else
-            FactoryBot.create(:task, priority: task_priority_low)
+            FactoryBot.create(:task, priority: task_priority_low, user: login_user)
           end
         end
       end
@@ -82,7 +94,7 @@ RSpec.describe 'タスク管理機能', type: :system do
       context "終了期限ソートリンクをクリックした場合" do
         it "終了期限が最も未来のタスクが一番上に表示される" do
           visit tasks_path
-          find("#sort-expired").click_on(I18n.t("tasks.index.sort"))
+          find("#sort-expired").click_on(I18n.t("tasks.table.sort"))
           sleep(0.1) #遷移が早すぎてdomが読み込まれる前にチェックされてしまうようなので0.1secスリープする
           expect(all("tbody tr").first).to have_content I18n.l(@task_expired_after.expired_at, format: :medium)
         end
@@ -90,7 +102,7 @@ RSpec.describe 'タスク管理機能', type: :system do
       context "優先順位ソートリンクをクリックした場合" do
         it "優先順位が高(high)のタスクが一番上に表示される" do
           visit tasks_path
-          find("#sort-priority").click_on(I18n.t("tasks.index.sort"))
+          find("#sort-priority").click_on(I18n.t("tasks.table.sort"))
           sleep(0.1) #遷移が早すぎてdomが読み込まれる前にチェックされてしまうようなので0.1secスリープする
           expect(all("tbody tr").first).to have_content I18n.t("tasks.priority.#{task_priority_high}")
         end
@@ -106,21 +118,21 @@ RSpec.describe 'タスク管理機能', type: :system do
         task_count.times do |i|
           if i == 1
             # タイトルあいまい検証に使用
-            @task_name1 = FactoryBot.create(:task, name: test_name + "タイトル", status: task_status)
+            @task_name1 = FactoryBot.create(:task, name: test_name + "タイトル", status: task_status, user: login_user)
           elsif i == 2
             # ステータス一致検証に使用
-            @task_expired_after = FactoryBot.create(:task, name: task_name, status: test_status)
+            @task_expired_after = FactoryBot.create(:task, name: task_name, status: test_status, user: login_user)
           elsif i == 3
             # タイトルあいまい、ステータス一致の検証に使用
-            @task_search = FactoryBot.create(:task, name: test_name, status: test_status)
+            @task_search = FactoryBot.create(:task, name: test_name, status: test_status, user: login_user)
           else
-            FactoryBot.create(:task, name: task_name, status: task_status)
+            FactoryBot.create(:task, name: task_name, status: task_status, user: login_user)
           end
         end
         visit tasks_path
         fill_in "task_name", with: search_name
         select search_status, from: "task_status"
-        click_on I18n.t("tasks.index.search")
+        click_on I18n.t("tasks.table.search")
       end
       context "タイトルであいまい検索をした場合" do
         let(:search_name) { test_name }
@@ -188,9 +200,9 @@ RSpec.describe 'タスク管理機能', type: :system do
         visit tasks_path
         expect {
           page.accept_confirm do
-            click_link(I18n.t("tasks.delete.title"), href: task_path(task01))
+            click_link(I18n.t("tasks.destroy.title"), href: task_path(task01))
           end
-          expect(page).to have_content "#{task01.name} #{I18n.t("tasks.delete.message")}"
+          expect(page).to have_content "#{task01.name} #{I18n.t("tasks.destroy.message")}"
         }.to change { Task.count }.by(-1)
       end
     end

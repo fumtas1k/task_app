@@ -1,0 +1,16 @@
+<%= provide(:title, t(".title") ) %>
+<div class="user-form-container">
+  <h1><%= t ".title" %></h1>
+  <%= form_with(scope: :session, url: sessions_path, local: true, class: "user-form") do |form| %>
+    <div class="form-group">
+      <%= form.label :email, class: "sr-only" %>
+      <%= form.email_field :email, placeholder: t("users.email"), class: "form-control", required: true, autofocus: true %>
+      <%= form.label :password, class: "sr-only" %>
+      <%= form.password_field :password, placeholder: t("users.password"), class: "form-control", required: true %>
+    </div>
+    <%= form.submit t(".btn"), class: "btn btn-primary btn-block" %>
+  <% end %>
+</div>
+<div class="user-form-container">
+  <span>アカウントをお持ちでないすか？ <%= link_to "登録する", new_user_path %></span>
+</div>

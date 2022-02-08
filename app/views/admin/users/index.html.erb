@@ -1,0 +1,39 @@
+<% provide(:title, t(".title")) %>
+<h1><%= t(".title") %></h1>
+<%= link_to t("admin.users.new.title"), new_admin_user_path, class: "btn btn-primary" %>
+<div class="table-responsive-lg">
+  <table class="users-table table">
+    <thead>
+      <tr>
+        <th scope="col"><%= t "users.id" %></th>
+        <th scope="col"><%= t "users.name" %></th>
+        <th scope="col"><%= t "users.email" %></th>
+        <th scope="col"><%= t "tasks.count" %></th>
+        <th scope="col"><%= t "users.admin" %></th>
+        <th scope="col"><%= t "users.created_at" %></th>
+        <th scope="col"><%= t "users.updated_at" %></th>
+        <th scope="col"><%= t "tasks.link" %></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @users.each do |user| %>
+        <tr>
+          <td><%= user.id %></td>
+          <td><p><%= user.name %></p></td>
+          <td><%= simple_format h(user.email) %></td>
+          <td><%= user.tasks.count %></td>
+          <td><%= user.admin %></td>
+          <td><%= l user.created_at, format: :medium %></td>
+          <td><%= l user.updated_at, format: :medium %></td>
+          <td>
+            <%= link_to t("admin.users.show.btn"), user_path(user), class: "btn btn-outline-primary btn-block" %>
+            <%= link_to t("admin.users.edit.btn"), edit_admin_user_path(user), class: "btn btn-outline-success btn-block" %>
+            <%= link_to t("admin.users.destroy.btn"), admin_user_path(user), class: "btn btn-outline-danger btn-block", method: :delete, data: {confirm: t("admin.users.destroy.confirmation")} %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <%= link_to "top", "#top", class: "btn btn-primary to-index-top" %>
+  <%= paginate @users %>
+</div>

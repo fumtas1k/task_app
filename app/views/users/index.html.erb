@@ -1,0 +1,15 @@
+<% provide(:title, t(".title")) %>
+<h1><%= t(".title") %></h1>
+<div class="users-container">
+  <% @users.each do |user| %>
+    <div class="user-container">
+      <%= link_to user_path(user) do %>
+        <div class="user-item">
+          <span><%= user.name %></span>
+          <span><%= user.email %></span>
+          <span><%= l user.created_at, format: :medium %></span>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+</div>

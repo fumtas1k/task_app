@@ -1,11 +1,26 @@
-n = 50
+user_n = 10
+task_n = 3
 
-n.times do |i|
-  Task.create!(
-    name: Faker::Book.title,
-    description: Faker::Hacker.say_something_smart,
-    expired_at: i.days.after,
-    status: Task.statuses.keys[i % 3],
-    priority: Task.priorities.keys[i % 3]
+User.create!(
+  name: "adminuser",
+  email: "adminuser@diver.com",
+  password: "password",
+  admin: true,
+)
+
+user_n.times do
+  user = User.create!(
+    name: Faker::Name.name,
+    email: Faker::Internet.unique.free_email,
+    password: "password",
   )
+  task_n.times do |i|
+    user.tasks.create!(
+      name: Faker::Book.title,
+      description: Faker::Hacker.say_something_smart,
+      expired_at: (rand(1..user_n)).days.after,
+      status: Task.statuses.keys[rand(0..2)],
+      priority: Task.priorities.keys[rand(0..2)],
+    )
+  end
 end

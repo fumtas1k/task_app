@@ -1,0 +1,5 @@
+<% provide(:title, t(".title")) %>
+<%= render "form", user: @user %>
+<div class="user-form-container">
+  <span>アカウントをお持ちですか？ <%= link_to "ログインする", new_session_path %></span>
+</div>

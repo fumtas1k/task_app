@@ -1,0 +1,36 @@
+<div class="user-form-container">
+  <h1><%= yield(:title) %></h1>
+  <%= form_with(model: user, url: choose_new_or_edit, local: true, class: "user-form") do |form| %>
+    <% if user.errors.any? %>
+      <div class="alert alert-danger" id="error_explanation">
+        <h4><%= pluralize(user.errors.count, t("tasks.errors.error")) + t("tasks.errors.message") %></h4>
+        <ul>
+          <% user.errors.full_messages.each do |msg| %>
+            <li><%= msg%></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+    <div class="form-group">
+      <%= form.label :name, class: "sr-only" %>
+      <%= form.text_field :name, class: "form-control", placeholder: t("users.name"), required: true, autofocus: true %>
+    </div>
+    <div class="form-group">
+      <%= form.label :email, class: "sr-only" %>
+      <%= form.email_field :email, placeholder: t("users.email"), class: "form-control", required: true %>
+    </div>
+    <div class="form-group">
+      <%= form.label :password, class: "sr-only" %>
+      <%= form.password_field :password, placeholder: t("users.password"), class: "form-control" %>
+    </div>
+    <div class="form-group">
+      <%= form.label :password_confirmation, class: "sr-only" %>
+      <%= form.password_field :password_confirmation, placeholder: t("users.password_confirmation"), class: "form-control" %>
+    </div>
+     <div class="form-group form-check">
+      <%= form.check_box :admin, {class: "form-check-input"}, "true", "false" %>
+      <%= form.label :admin, class: "form-check-label" %>
+    </div>
+    <%= form.submit nil, class: "btn btn-primary btn-block" %>
+  <% end %>
+</div>

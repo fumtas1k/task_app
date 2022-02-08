@@ -9,6 +9,7 @@ ja:
           has_many: "%{record}が存在しているので削除できません"
     models:
       task: タスク
+      user: ユーザー
     attributes:
       task:
         name: タイトル
@@ -26,6 +27,14 @@ ja:
           low: 低
           medium: 中
           high: 高
+      user:
+        name: 名前
+        email: メールアドレス
+        password: パスワード
+        password_confirmation: 確認用パスワード
+        created_at: 登録日時
+        updated_at: 更新日時
+        admin: 管理者
   tasks:
     name: タイトル
     description: 詳細説明
@@ -33,6 +42,8 @@ ja:
     created_at: 登録日時
     updated_at: 更新日時
     link: リンク
+    count: タスク件数
+    user_name: 作成者
     status:
       title: ステータス
       todo: 未着手
@@ -45,24 +56,86 @@ ja:
       high: 高
     index:
       title: タスク一覧
+    table:
       sort: ソート
       search: 検索
       clear: クリア
     new:
       title: 新規登録
+    create:
       message: を新規登録しました!
     show:
       title: 詳細
     edit:
       title: 編集
+    update:
       message: を編集しました!
-    delete:
+    destroy:
       title: 削除
       confirmation: 本当に削除しますか?
       message: を削除しました!
     errors:
       error: 件
       message: のエラーがあります。
+  users:
+    id: ID
+    name: 名前
+    email: メールアドレス
+    password: パスワード
+    password_confirmation: 確認用パスワード
+    admin: 管理者
+    created_at: 登録日時
+    updated_at: 更新日時
+    index:
+      title: ユーザー一覧
+    new:
+      title: Sign Up
+    create:
+      message: アカウント登録しました。
+    edit:
+      title: プロフィール編集
+      btn: 編集
+    show:
+      title: マイページ
+    update:
+      message: プロフィールを更新しました。
+    destroy:
+      confirmation: 本当に退会しますか?
+      message: 退会しました。
+      btn: 退会
+  sessions:
+    new:
+      title: ログイン
+      btn: ログイン
+    create:
+      message: ログインしました。
+      caution: メールアドレス and/or パスワードが違います。
+    destroy:
+      title: ログアウト
+      message: ログアウトしました。
+  admin:
+    users:
+      index:
+        title: ユーザー管理画面
+      show:
+        btn: 詳細
+      new:
+        title: ユーザー新規登録
+      create:
+        message: アカウント登録しました。
+      edit:
+        title: ユーザー編集
+        btn: 編集
+      update:
+        message: プロフィールを更新しました。
+        caution: 管理者が1人しかいないため変更できません。
+      destroy:
+        confirmation: 本当に削除しますか?
+        message: 削除しました。
+        caution: 管理者が1人しかいないため削除できません。
+        btn: 削除
+      admin_required:
+        caution: "管理者以外はアクセスできません。"
   views:
     pagination:
       first: 最初
