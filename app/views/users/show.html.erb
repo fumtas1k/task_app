@@ -1,5 +1,9 @@
 <% provide(:title, t(".title")) %>
 <h1><%= t ".title" %></h1>
+<% if current_user.admin? %>
+  <%= link_to t("admin.users.edit.btn"), edit_admin_user_path(@user), class: "btn btn-outline-success" %>
+  <%= link_to t("admin.users.destroy.btn"), admin_user_path(@user), method: :delete, class: "btn btn-outline-danger", data: {confirm: t("admin.users.destroy.message")} %>
+<% end %>
 <table class="user-show-container table">
   <tr class="task-item">
     <th class="scope" scope="row"><%= t "users.name" %></th>
@@ -11,6 +15,5 @@
   </tr>
 </table>
 <hr>
-
 
 <%= render "tasks/table", tasks: @tasks, search_params: @search_params %>

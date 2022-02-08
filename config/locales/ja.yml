@@ -134,6 +134,8 @@ ja:
         message: 削除しました。
         caution: 管理者が1人しかいないため削除できません。
         btn: 削除
+      admin_required:
+        caution: "管理者以外はアクセスできません。"
   views:
     pagination:
       first: 最初

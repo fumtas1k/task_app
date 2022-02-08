@@ -58,4 +58,37 @@ RSpec.describe User, type: :model do
       it_behaves_like "バリデーションに引っかかる"
     end
   end
+  describe "コールバックのテスト" do
+    let!(:admin01) { FactoryBot.create(:user, name: "管理ユーザー1", email: "admin01@diver.com", admin: true) }
+    let!(:user) { FactoryBot.create(:user, name: "一般ユーザー", email: "example@diver.com", admin: false) }
+    context "管理者が2人いる場合" do
+      it "削除できる" do
+        admin02 = FactoryBot.create(:user, name: "管理ユーザー2", email: "admin02@diver.com", admin: true)
+        expect{admin02.destroy}.to change{ User.count }.by(-1)
+      end
+    end
+    context "管理者が1人の場合" do
+      it "管理者を削除できない" do
+        expect{admin01.destroy}.to change{ User.count }.by(0)
+      end
+      it "非管理者は削除できる" do
+        expect{user.destroy}.to change{ User.count }.by(-1)
+      end
+      it "管理者のadmin属性をfalseに変更できない" do
+        admin01.update(admin: false)
+        admin01.reload
+        expect(admin01.admin).to be_truthy
+      end
+    end
+  end
+
+  describe "アソシエーションのテスト" do
+    context "タスクを作成しているユーザーを削除した場合" do
+      it "作成したタスクも削除される" do
+        user = FactoryBot.create(:user)
+        task = FactoryBot.create(:task, user: user)
+        expect{ user.destroy }.to change{ Task.count }.by(-1)
+      end
+    end
+  end
 end

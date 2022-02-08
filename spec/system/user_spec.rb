@@ -1,10 +1,8 @@
 require 'rails_helper'
-RSpec.describe User, type: :system do
+RSpec.describe :user, type: :system do
   let!(:login_user) { FactoryBot.create(:user, name: "ログインユーザー", email: "example01@diver.com", password: "password", password_confirmation: "password") }
-  let!(:other_user) { FactoryBot.create(:user, name: "他のユーザー", email: "other@diver.com", password: "password")}
   describe "Sign up機能" do
     before do
-      visit users_path
       visit new_user_path
       fill_in "user_name", with: user_new.name
       fill_in "user_email", with: user_new.email
@@ -12,10 +10,9 @@ RSpec.describe User, type: :system do
       fill_in "user_password_confirmation", with: user_new.password_confirmation
       click_on I18n.t("helpers.submit.create")
     end
-
     context "全て入力してsignupした場合" do
       let!(:user_new) { FactoryBot.build(:user) }
-      it "登録したプロフィール画面のurlにリダイレクトする" do
+      it "新規登録できる" do
         expect(current_path).to eq user_path(User.last)
         expect(page).to have_content user_new.email
       end
@@ -38,22 +35,6 @@ RSpec.describe User, type: :system do
       end
     end
   end
-
-  describe "ユーザー一覧機能" do
-    context "ユーザー一覧画面に遷移した場合" do
-      before do
-        visit new_session_path
-        fill_in "session_email", with: login_user.email
-        fill_in "session_password", with: login_user.password
-        click_on I18n.t("sessions.new.btn")
-      end
-      it "ユーザー一覧が表示される" do
-        visit users_path
-        expect(page).to have_css ".user-container", count:2
-      end
-    end
-  end
-
   describe "プロフィール機能" do
     before do
       visit new_session_path
@@ -61,67 +42,10 @@ RSpec.describe User, type: :system do
       fill_in "session_password", with: login_user.password
       click_on I18n.t("sessions.new.btn")
     end
-    context "ログインユーザーのマイページに遷移した場合" do
-      it "ログインユーザーのメールアドレスが表示される" do
+    context "マイページに遷移した場合" do
+      it "マイページが表示される" do
         visit user_path(login_user)
         expect(page).to have_content login_user.email
-      end
-    end
-    context "他のユーザーのマイページに遷移した場合" do
-      it "タスク一覧画面が表示される" do
-        visit user_path(other_user)
-        expect(current_path).to eq tasks_path
-        expect(page).to have_content I18n.t("tasks.index.title")
-      end
-    end
-  end
-
-  describe "ユーザー編集機能" do
-    let(:edit_user) { FactoryBot.create(:user, name: before_name) }
-    before do
-      visit new_session_path
-      fill_in "session_email", with: edit_user.email
-      fill_in "session_password", with: edit_user.password
-      click_on I18n.t("sessions.new.btn")
-    end
-    context "ユーザーの名前を変更した場合" do
-      let(:before_name) { "新渡戸稲造" }
-      let(:after_name) { "樋口一葉" }
-      before do
-        visit edit_user_path(edit_user)
-        fill_in "user_name", with: after_name
-        click_on I18n.t("helpers.submit.update")
-      end
-      it "プロフィール画面にリダイレクトし、更新した旨が表示される" do
-        expect(current_path).to eq user_path(edit_user)
-        expect(page).to have_content I18n.t("users.update.message")
-      end
-      it "以前の名前は表示されない" do
-        expect(page).not_to have_content before_name
-      end
-      it "変更後の名前が表示される" do
-        expect(page).to have_content after_name
-      end
-    end
-  end
-
-  describe "ユーザー退会機能" do
-    before do
-      visit new_session_path
-      fill_in "session_email", with: login_user.email
-      fill_in "session_password", with: login_user.password
-      click_on I18n.t("sessions.new.btn")
-    end
-    context "ユーザー退会ボタンを押した場合" do
-      it "ユーザーが削除されSign Upページにリダイレクトしメッセージが表示される" do
-        visit user_path(login_user)
-        expect {
-          page.accept_confirm do
-            click_on I18n.t("users.destroy.btn")
-          end
-          expect(page).to have_content I18n.t("users.destroy.message")
-          expect(current_path).to eq new_user_path
-        }.to change { User.count }.by(-1)
       end
     end
   end
