@@ -34,23 +34,23 @@ class UsersController < ApplicationController
     end
   end
 
-  def edit
-  end
+  # def edit
+  # end
 
-  def update
-    if @user.update(user_params)
-      flash[:success] = t ".message"
-      redirect_to @user
-    else
-      render :edit
-    end
-  end
+  # def update
+  #   if @user.update(user_params)
+  #     flash[:success] = t ".message"
+  #     redirect_to @user
+  #   else
+  #     render :edit
+  #   end
+  # end
 
-  def destroy
-    @user.destroy
-    flash[:danger] = t ".message"
-    redirect_to new_user_path
-  end
+  # def destroy
+  #   @user.destroy
+  #   flash[:danger] = t ".message"
+  #   redirect_to new_user_path
+  # end
 
   private
   def user_params
