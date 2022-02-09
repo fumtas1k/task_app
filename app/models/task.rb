@@ -8,6 +8,8 @@ class Task < ApplicationRecord
   enum priority: { low: 0, medium: 10, high: 20 }, _prefix: true
   attribute :priority, default: :high
   belongs_to :user
+  has_many :labelings, dependent: :destroy
+  has_many :labels, through: :labelings, source: :label
 
   scope :change_sort, -> (column, direction) { order("#{column} #{direction}") }
   scope :search, -> (name, status) {
