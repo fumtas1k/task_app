@@ -74,6 +74,7 @@ development:
 
 test:
   <<: *default
+  extract_css: false
   compile: true
 
   # Compile test packs to a separate directory

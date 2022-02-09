@@ -1,0 +1,23 @@
+<%= form_with(model: label, url: choose_label_new_or_edit, local: true, class: "label-form") do |form| %>
+  <% if label.errors.any? %>
+    <div class="alert alert-danger" id="error_explanation">
+      <ul>
+        <% label.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <div class="form-group">
+    <%= form.label :name, class: "sr-only" %>
+    <%= form.text_field :name, class: "form-control", placeholder: t("admin.labels.name"), maxlength: 10, autofocus: true %>
+  </div>
+  <div class="form-group">
+    <%= form.submit nil, class: "btn btn-primary btn-block" %>
+  </div>
+  <div class="form-group">
+    <% if %w[ edit update ].include?(action_name) %>
+    <%= link_to t("admin.labels.destroy.btn"), admin_label_path(label), method: :delete, class: "btn btn-danger btn-block", data: {confirm: t("admin.labels.destroy.confirmation") }%>
+    <% end %>
+  </div>
+<% end %>

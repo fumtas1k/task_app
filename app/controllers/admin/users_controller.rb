@@ -51,10 +51,4 @@ class Admin::UsersController < ApplicationController
   def set_user
     @user = User.find(params[:id])
   end
-  def admin_required
-    unless current_user.admin?
-      flash[:danger] = t("admin.users.admin_required.caution")
-      redirect_to tasks_path
-    end
-  end
 end

@@ -1,4 +1,9 @@
 Rails.application.routes.draw do
+  namespace :admin do
+    get 'labels/index'
+    get 'labels/new'
+    get 'labels/edit'
+  end
   root "tasks#index"
   resources :tasks
   resources :users, only: %i[ new create show ]

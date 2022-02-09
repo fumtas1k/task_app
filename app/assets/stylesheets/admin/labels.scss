@@ -1,0 +1,26 @@
+// index
+a.label {
+  display: inline-block;
+  padding: 2px 10px;
+  margin: 5px;
+  background-color: rgb(226, 255, 228);
+  border-radius: 5px;
+  color: inherit;
+  &:hover{
+    text-decoration: none;
+    color: inherit;
+    background-color: rgb(201, 241, 204);
+  }
+}
+.labels-container {
+  width: 100%;
+  padding-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+}
+
+// form
+.label-form {
+  max-width: 300px;
+}

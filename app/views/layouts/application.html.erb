@@ -25,6 +25,9 @@
                 <li class="nav-item <%= color_activate(t("admin.users.index.title"), yield(:title))%>">
                   <%= link_to t("admin.users.index.title"), admin_users_path, class: "nav-link" %>
                 </li>
+                <li class="nav-item <%= color_activate(t("admin.labels.index.title"), yield(:title))%>">
+                  <%= link_to t("admin.labels.index.title"), admin_labels_path, class: "nav-link" %>
+                </li>
               <% end %>
               <li class="nav-item <%= color_activate(t("tasks.index.title"), yield(:title))%>">
                 <%= link_to t("tasks.index.title"), tasks_path, class: "nav-link" %>

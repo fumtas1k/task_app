@@ -10,6 +10,7 @@ ja:
     models:
       task: タスク
       user: ユーザー
+      label: ラベル
     attributes:
       task:
         name: タイトル
@@ -35,6 +36,10 @@ ja:
         created_at: 登録日時
         updated_at: 更新日時
         admin: 管理者
+      label:
+        name: ラベル名
+        created_at: 登録日時
+        updated_at: 更新日時
   tasks:
     name: タイトル
     description: 詳細説明
@@ -136,6 +141,23 @@ ja:
         btn: 削除
       admin_required:
         caution: "管理者以外はアクセスできません。"
+    labels:
+      name: ラベル名
+      index:
+        title: ラベル管理画面
+      new:
+        title: ラベル新規作成
+      create:
+        message: ラベル新規登録しました。
+      edit:
+        title: ラベル編集
+        btn: 編集
+      update:
+        message: ラベルを更新しました。
+      destroy:
+        confirmation: 関連しているタスクがある可能性があります。本当に削除してよろしいですか？
+        message: 削除しました。
+        btn: 削除
   views:
     pagination:
       first: 最初
