@@ -18,7 +18,7 @@ class ApplicationController < ActionController::Base
   end
 
   def search_params
-    params.require(:task).permit(:name, :status)
+    params.require(:task).permit(:name, :status, :label_id)
   end
   def sort_column
     Task.column_names.include?(params[:column]) ? params[:column] : "created_at"

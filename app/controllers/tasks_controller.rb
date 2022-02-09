@@ -14,9 +14,9 @@ class TasksController < ApplicationController
     else
       @search_params = {task: search_params}
       if current_user.admin?
-        Task.includes(:user).search(search_params[:name], search_params[:status]).change_sort(sort_column, sort_direction).page(params[:page])
+        Task.includes(:user).search(search_params[:name], search_params[:status], search_params[:label_id]).change_sort(sort_column, sort_direction).page(params[:page])
       else
-        current_user.tasks.search(search_params[:name], search_params[:status]).change_sort(sort_column, sort_direction).page(params[:page])
+        current_user.tasks.search(search_params[:name], search_params[:status], search_params[:label_id]).change_sort(sort_column, sort_direction).page(params[:page])
       end
     end
   end

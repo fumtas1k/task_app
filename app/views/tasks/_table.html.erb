@@ -2,6 +2,7 @@
   <%= form_with(scope: :task, url: tasks_path, local: true, class: "search-form form-inline", method: :get) do |form| %>
     <%= form.text_field :name, placeholder: t("tasks.name"), value: hash_nil_guard(search_params, :task, :name), class: "form-control mr-sm-2" %>
     <%= form.select :status, Task.statuses.keys.map{|status| [t("tasks.status.#{status}"), status]}, {include_blank: t("tasks.status.title"), selected: hash_nil_guard(search_params, :task, :status)},{class: "form-control mr-sm-2"} %>
+    <%= form.select :label_id, Label.all.order(:name).map{|label| [label.name, label.id]}, {include_blank: t("admin.labels.name"), selected: hash_nil_guard(search_params, :task, :label_id)},{class: "form-control mr-sm-2"} %>
     <%= form.submit t(".search"), class: "btn btn-warning mr-sm-2" %>
     <%= link_to t(".clear"), tasks_path, class: "btn btn-secondary mr-sm-2" %>
   <% end %>
@@ -29,6 +30,7 @@
           <br>
           <%= sort_by("priority", t(".sort"), search_params) %>
         </th>
+        <th scope="col"><%= t "admin.labels.name" %></th>
         <th scope="col"><%= t "tasks.link" %></th>
       </tr>
     </thead>
@@ -42,6 +44,11 @@
           <td><%= l task.created_at, format: :medium %></td>
           <td class=<%= set_status_color(task.status) %>><%= t "tasks.status.#{task.status}" %></td>
           <td class=<%= set_priority_color(task.priority)%>><%= t "tasks.priority.#{task.priority}" %></td>
+          <td class="labels-group">
+            <% task.labels.each do |label| %>
+              <%= content_tag :span, label.name, class: "label" %>
+            <% end %>
+          </td>
           <td>
             <%= link_to t("tasks.show.title"), task_path(task), class: "btn btn-outline-primary btn-block" %>
             <%= link_to t("tasks.edit.title"), edit_task_path(task), class: "btn btn-outline-success btn-block" %>

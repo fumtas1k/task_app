@@ -12,19 +12,22 @@ class Task < ApplicationRecord
   has_many :labels, through: :labelings, source: :label
 
   scope :change_sort, -> (column, direction) { order("#{column} #{direction}") }
-  scope :search, -> (name, status) {
+  scope :search, -> (name, status, label_id) {
     status_num = self.statuses[status]
-    if name.nil? && status_num.nil?
-      change_sort(sort_column, sort_direction)
-    else
-      search_sql = if name.present? && status_num.present?
-        ["tasks.name LIKE ? AND tasks.status = ?", "%#{self.sanitize_sql_like(name)}%", "#{status_num}"]
-      elsif name.present?
-        ["tasks.name LIKE ?", "%#{self.sanitize_sql_like(name)}%"]
-      elsif status_num.present?
-        ["tasks.status = ?", "#{status_num}"]
+    search_args = [
+      ["%#{self.sanitize_sql_like(name)}%", "tasks.name LIKE ?"],
+      [status_num, "tasks.status = ?"],
+      [label_id, "labels.id = ?"],
+    ]
+    search_sql = [""]
+    search_args.each do |value, text|
+      if value.present? && value != "%%"
+        search_sql[0] = search_sql[0].present? ? [search_sql[0], text].join(" AND ") : text
+        search_sql << value
       end
-      where(search_sql)
+    end
+    if search_sql[0].present?
+        joins(:labels).where(search_sql)
     end
   }
 end
