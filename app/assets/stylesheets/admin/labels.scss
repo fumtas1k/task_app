@@ -8,6 +8,9 @@
   &:hover {
     background-color: rgb(201, 241, 204);
     box-shadow: 1px 1px 2px #ccc;
+    a.delete {
+      display: inline;
+    }
   }
   &:active {
     box-shadow: none;
@@ -20,6 +23,7 @@
     }
   }
   a.delete {
+    display: none;
     &:hover {
       font-weight: bold;
     }
