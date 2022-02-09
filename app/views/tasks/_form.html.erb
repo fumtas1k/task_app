@@ -27,6 +27,14 @@
       <%= form.label :priority, class: "task-form-label" %>
       <%= form.select :priority, Task.priorities.keys.map{ |priority| [t("tasks.priority.#{priority}"), priority]}, {}, {required: true, class: "form-control mr-sm-2"} %>
     </div>
+    <div class="form-group labels-group">
+      <%= form.collection_check_boxes :label_ids, Label.all.order(:name), :id, :name, class: "label" do |b| %>
+        <div class="label">
+          <%= b.check_box %>
+          <%= b.label {b.text} %>
+        </div>
+      <% end %>
+    </div>
     <div class="form-group form-inline">
       <%= form.label :expired_at, class: "task-form-label" %>
       <%= form.datetime_field :expired_at, class: "form-control mr-sm-2", required: true %>
