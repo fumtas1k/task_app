@@ -189,6 +189,7 @@ RSpec.describe :admin, type: :system do
       it "ラベルが削除され数がラベル総数が一つ減る" do
         expect{
           page.accept_confirm do
+            find(".label").hover
             find(".delete").click
           end
           expect(page).to have_content I18n.t("admin.labels.destroy.message")
