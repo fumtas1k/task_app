@@ -109,34 +109,23 @@ RSpec.describe 'タスク管理機能', type: :system do
       end
     end
     describe "検索機能" do
-      let(:task_name) { "モブタイトル" }
-      let(:test_name) { "テスト" }
-      let(:task_status) { Task.statuses.keys[0] }
-      let(:test_status) { Task.statuses.keys[-1] }
-      let(:task_count) { 5 }
+      let!(:label01) { FactoryBot.create(:label, name: "ラベル01")}
+      let!(:label02) { FactoryBot.create(:label, name: "ラベル02")}
+      let!(:task) { FactoryBot.create(:task, name: "テスト", status: Task.statuses.keys[0], labels:[label01], user: login_user ) }
+      let!(:task02) { FactoryBot.create(:task, name: "サンプル", status: Task.statuses.keys[0], labels: [label02], user: login_user) }
+      let!(:task03) { FactoryBot.create(:task, name: "サンプル", status: Task.statuses.keys[1], labels: [label01], user: login_user ) }
+      let!(:task04) { FactoryBot.create(:task, name: "テストタスク", status: Task.statuses.keys[1], labels:[label02], user: login_user ) }
       before do
-        task_count.times do |i|
-          if i == 1
-            # タイトルあいまい検証に使用
-            @task_name1 = FactoryBot.create(:task, name: test_name + "タイトル", status: task_status, user: login_user)
-          elsif i == 2
-            # ステータス一致検証に使用
-            @task_expired_after = FactoryBot.create(:task, name: task_name, status: test_status, user: login_user)
-          elsif i == 3
-            # タイトルあいまい、ステータス一致の検証に使用
-            @task_search = FactoryBot.create(:task, name: test_name, status: test_status, user: login_user)
-          else
-            FactoryBot.create(:task, name: task_name, status: task_status, user: login_user)
-          end
-        end
         visit tasks_path
         fill_in "task_name", with: search_name
         select search_status, from: "task_status"
+        select search_label, from: "task_label_id"
         click_on I18n.t("tasks.table.search")
       end
       context "タイトルであいまい検索をした場合" do
-        let(:search_name) { test_name }
+        let(:search_name) { task.name }
         let(:search_status) { I18n.t("tasks.status.title") } #blankを選択
+        let(:search_label) { I18n.t("admin.labels.name") } #blankを選択
         it "検索キーワードを含むタスクで絞り込まれる" do
           expect(all("tbody tr").count).to eq 2
           expect(all("tbody tr").first).to have_content search_name
@@ -144,19 +133,61 @@ RSpec.describe 'タスク管理機能', type: :system do
       end
       context "ステータス検索をした場合" do
         let(:search_name) { "" }
-        let(:search_status) { I18n.t("tasks.status.#{test_status}") }
+        let(:search_status) { I18n.t("tasks.status.#{task03.status}") }
+        let(:search_label) { I18n.t("admin.labels.name") } #blankを選択
         it "検索ステータスに完全一致するタスクが絞り込まれる" do
           expect(all("tbody tr").count).to eq 2
           expect(all("tbody tr").first).to have_content search_status
         end
       end
+      context "ラベル検索をした場合" do
+        let(:search_name) { "" }
+        let(:search_status) { I18n.t("tasks.status.title") } #blankを選択
+        let(:search_label) { task02.labels[0].name }
+        it "検索ラベルに完全一致するタスクが絞り込まれる" do
+          expect(all("tbody tr").count).to eq 2
+          expect(all("tbody tr").first).to have_content search_label
+        end
+      end
       context "タイトルとステータスで検索した場合" do
-        let(:search_name) { test_name }
-        let(:search_status) { I18n.t("tasks.status.#{test_status}") }
+        let(:search_name) { task02.name }
+        let(:search_status) { I18n.t("tasks.status.#{task02.status}") }
+        let(:search_label) { I18n.t("admin.labels.name") } #blankを選択
         it "検索キーワードをタイトルに含み、かつステータスに完全一致するタスクが絞り込まれる" do
           expect(all("tbody tr").count).to eq 1
           expect(all("tbody tr").first).to have_content search_name
           expect(all("tbody tr").first).to have_content search_status
+        end
+      end
+      context "タイトルとラベルで検索した場合" do
+        let(:search_name) { task03.name }
+        let(:search_status) { I18n.t("tasks.status.title") } #blankを選択
+        let(:search_label) { task03.labels[0].name }
+        it "検索キーワードをタイトルに含み、かつラベルに完全一致するタスクが絞り込まれる" do
+          expect(all("tbody tr").count).to eq 1
+          expect(all("tbody tr").first).to have_content search_name
+          expect(all("tbody tr").first).to have_content search_label
+        end
+      end
+      context "ステータスとラベルで検索した場合" do
+        let(:search_name) { "" }
+        let(:search_status) { I18n.t("tasks.status.#{task.status}") }
+        let(:search_label) { task.labels[0].name }
+        it "ステータスとラベルに完全一致するタスクが絞り込まれる" do
+          expect(all("tbody tr").count).to eq 1
+          expect(all("tbody tr").first).to have_content search_status
+          expect(all("tbody tr").first).to have_content search_label
+        end
+      end
+      context "タイトルとステータスとラベルで検索した場合" do
+        let(:search_name) { task.name }
+        let(:search_status) { I18n.t("tasks.status.#{task.status}") }
+        let(:search_label) { task.labels[0].name }
+        it "検索キーワードをタイトルに含みかつステータスとラベルに完全一致するタスクが絞り込まれる" do
+          expect(all("tbody tr").count).to eq 1
+          expect(all("tbody tr").first).to have_content search_name
+          expect(all("tbody tr").first).to have_content search_status
+          expect(all("tbody tr").first).to have_content search_label
         end
       end
     end

@@ -146,4 +146,55 @@ RSpec.describe :admin, type: :system do
       end
     end
   end
+
+  describe "ラベル管理機能" do
+    let(:before_name) { "らべるビフォア" }
+    let(:after_name) { "らべるアフター"}
+    before do
+      visit new_session_path
+      fill_in "session_email", with: admin.email
+      fill_in "session_password", with: admin.password
+      click_on I18n.t("sessions.new.btn")
+    end
+    context "ラベル新規作成画面で新規作成した場合" do
+      before do
+        visit new_admin_label_path
+        fill_in "label_name", with: before_name
+        click_on I18n.t("helpers.submit.create")
+      end
+      it "ラベル管理画面にリダイレクトし登録したラベルが表示される" do
+        expect(current_path).to eq admin_labels_path
+        expect(page).to have_content before_name
+      end
+    end
+    context "ラベル編集画面で編集した場合" do
+      before do
+        FactoryBot.create(:label, name: before_name)
+        visit admin_labels_path
+        click_on before_name
+        fill_in "label_name", with: after_name
+        click_on I18n.t("helpers.submit.update")
+      end
+      it "ラベル管理画面にリダイレクトし、変更したラベル名が表示される" do
+        expect(current_path).to eq admin_labels_path
+        expect(page).not_to have_content before_name
+        expect(page).to have_content after_name
+      end
+    end
+    context "ラベル管理画面で削除ボタンを押した場合" do
+      before do
+        FactoryBot.create(:label, name: before_name)
+        visit admin_labels_path
+      end
+      it "ラベルが削除され数がラベル総数が一つ減る" do
+        expect{
+          page.accept_confirm do
+            find(".delete").click
+          end
+          expect(page).to have_content I18n.t("admin.labels.destroy.message")
+          expect(page).not_to have_content before_name
+        }.to change{ Label.count }.by(-1)
+      end
+    end
+  end
 end

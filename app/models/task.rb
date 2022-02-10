@@ -15,7 +15,7 @@ class Task < ApplicationRecord
   scope :search, -> (name, status, label_id) {
     status_num = self.statuses[status]
     search_args = [
-      ["%#{self.sanitize_sql_like(name)}%", "tasks.name LIKE ?"],
+      ["%#{self.sanitize_sql_like(name || "")}%", "tasks.name LIKE ?"],
       [status_num, "tasks.status = ?"],
       [label_id, "labels.id = ?"],
     ]
