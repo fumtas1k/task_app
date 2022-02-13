@@ -13,6 +13,7 @@ gem 'jbuilder', '~> 2.7'
 gem "kaminari"
 # gem 'redis', '~> 4.0'
 gem 'bcrypt'
+gem "faker"
 
 # gem 'image_processing', '~> 1.2'
 
@@ -27,7 +28,6 @@ group :development, :test do
   gem "factory_bot_rails"
   gem "rexml"
   gem "dotenv-rails"
-  gem "faker"
 end
 
 group :development do

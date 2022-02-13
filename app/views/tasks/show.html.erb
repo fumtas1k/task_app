@@ -22,6 +22,14 @@
     <td class=<%= set_priority_color(@task.priority)%>><%= t "tasks.priority.#{@task.priority}" %></td>
   </tr>
   <tr class="task-item">
+    <th class="scope" scope="row"><%= t "admin.labels.name" %></th>
+    <td class="labels-group">
+      <% @task.labels.each do |label| %>
+        <%= content_tag(:span, label.name, class: "label") %>
+      <% end %>
+    </td>
+  </tr>
+  <tr class="task-item">
     <th class="scope" scope="row"><%= t "tasks.created_at" %></th>
     <td><%= l @task.created_at, format: :long %></td>
   </tr>

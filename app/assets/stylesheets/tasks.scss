@@ -54,6 +54,11 @@
     width: 100px;
     text-align: left;
   }
+  .labels-group {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
 }
 
 // show

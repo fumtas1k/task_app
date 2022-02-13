@@ -1,0 +1,11 @@
+<% provide(:title, t(".title")) %>
+<h1><%= t ".title" %></h1>
+<%= link_to t("admin.labels.new.title"), new_admin_label_path, class: "btn btn-primary" %>
+<div class="labels-container">
+  <% @labels.each do |label| %>
+    <div class="label">
+      <%= link_to label.name, edit_admin_label_path(label) %>
+      <%= link_to "x", admin_label_path(label), method: :delete, class: "delete", data: {confirm: t("admin.labels.destroy.confirmation")} %>
+    </div>
+  <% end %>
+</div>

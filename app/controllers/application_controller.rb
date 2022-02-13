@@ -18,12 +18,19 @@ class ApplicationController < ActionController::Base
   end
 
   def search_params
-    params.require(:task).permit(:name, :status)
+    params.require(:task).permit(:name, :status, :label_id)
   end
   def sort_column
     Task.column_names.include?(params[:column]) ? params[:column] : "created_at"
   end
   def sort_direction
     %w[asc desc].include?(params[:direction]) ? params[:direction] : "desc"
+  end
+
+  def admin_required
+    unless current_user.admin?
+      flash[:danger] = t("admin.users.admin_required.caution")
+      redirect_to tasks_path
+    end
   end
 end

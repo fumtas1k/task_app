@@ -1,5 +1,7 @@
 require 'rails_helper'
 RSpec.describe 'タスク管理機能', type: :system do
+  let!(:label_top01) { FactoryBot.create(:label, name: "らべるtop01")}
+  let!(:label_top02) { FactoryBot.create(:label, name: "らべるtop02")}
   let!(:login_user) { FactoryBot.create(:user, name: "ログインユーザー", email: "login@diver.com", password: "password", password_confirmation: "password") }
   let!(:other_user) { FactoryBot.create(:user) }
   before do
@@ -8,7 +10,7 @@ RSpec.describe 'タスク管理機能', type: :system do
     fill_in "session_password", with: login_user.password
     click_on I18n.t("sessions.new.btn")
   end
-  let!(:task01) { FactoryBot.create(:task, name: "1つ目のタスク", description: "1番目の仕事", user: login_user) }
+  let!(:task01) { FactoryBot.create(:task, name: "1つ目のタスク", description: "1番目の仕事", labels: [label_top01], user: login_user) }
   describe '新規作成機能' do
     before do
       visit new_task_path
@@ -16,6 +18,7 @@ RSpec.describe 'タスク管理機能', type: :system do
       fill_in "task_description", with: task_description
       select task_status, from: "task_status"
       select task_priority, from: "task_priority"
+      check task_label
       fill_in "task_expired_at", with: task_expired_at
       click_on I18n.t("helpers.submit.create")
     end
@@ -25,12 +28,15 @@ RSpec.describe 'タスク管理機能', type: :system do
       let(:task_expired_at) { 3.days.after }
       let(:task_status) { I18n.t("tasks.status.#{Task.statuses.keys[1]}") }
       let(:task_priority) { I18n.t("tasks.priority.#{Task.priorities.keys[1]}")}
+      let(:task_label) { label_top02.name }
       it "詳細画面のurlにリダイレクトする" do
         expect(current_path).to eq task_path(Task.last)
       end
-      it '作成したタスクが表示される' do
+      it '作成したタスクがラベルも含め表示される' do
         # alertでもtask_nameが表示されるため合計2つ
-        expect(page).to have_content "2つ目の@タスク", count: 2
+        expect(page).to have_content task_name, count: 2
+        expect(page).to have_content task_label
+        expect(page).not_to have_content label_top01.name
       end
     end
     context "タスク名、タスク詳細を空白文字にしてタスクを新規作成した場合" do
@@ -39,6 +45,7 @@ RSpec.describe 'タスク管理機能', type: :system do
       let(:task_status) { I18n.t("tasks.status.#{Task.statuses.keys[1]}") }
       let(:task_priority) { I18n.t("tasks.priority.#{Task.priorities.keys[1]}")}
       let(:task_expired_at) { 3.days.after }
+      let(:task_label) { label_top02.name }
       it "新規作成画面が表示される" do
         expect(page).to have_content I18n.t("tasks.new.title")
       end
@@ -109,34 +116,23 @@ RSpec.describe 'タスク管理機能', type: :system do
       end
     end
     describe "検索機能" do
-      let(:task_name) { "モブタイトル" }
-      let(:test_name) { "テスト" }
-      let(:task_status) { Task.statuses.keys[0] }
-      let(:test_status) { Task.statuses.keys[-1] }
-      let(:task_count) { 5 }
+      let!(:label01) { FactoryBot.create(:label, name: "ラベル01")}
+      let!(:label02) { FactoryBot.create(:label, name: "ラベル02")}
+      let!(:task) { FactoryBot.create(:task, name: "テスト", status: Task.statuses.keys[0], labels:[label01], user: login_user ) }
+      let!(:task02) { FactoryBot.create(:task, name: "サンプル", status: Task.statuses.keys[0], labels: [label02], user: login_user) }
+      let!(:task03) { FactoryBot.create(:task, name: "サンプル", status: Task.statuses.keys[1], labels: [label01], user: login_user ) }
+      let!(:task04) { FactoryBot.create(:task, name: "テストタスク", status: Task.statuses.keys[1], labels:[label02], user: login_user ) }
       before do
-        task_count.times do |i|
-          if i == 1
-            # タイトルあいまい検証に使用
-            @task_name1 = FactoryBot.create(:task, name: test_name + "タイトル", status: task_status, user: login_user)
-          elsif i == 2
-            # ステータス一致検証に使用
-            @task_expired_after = FactoryBot.create(:task, name: task_name, status: test_status, user: login_user)
-          elsif i == 3
-            # タイトルあいまい、ステータス一致の検証に使用
-            @task_search = FactoryBot.create(:task, name: test_name, status: test_status, user: login_user)
-          else
-            FactoryBot.create(:task, name: task_name, status: task_status, user: login_user)
-          end
-        end
         visit tasks_path
         fill_in "task_name", with: search_name
         select search_status, from: "task_status"
+        select search_label, from: "task_label_id"
         click_on I18n.t("tasks.table.search")
       end
       context "タイトルであいまい検索をした場合" do
-        let(:search_name) { test_name }
+        let(:search_name) { task.name }
         let(:search_status) { I18n.t("tasks.status.title") } #blankを選択
+        let(:search_label) { I18n.t("admin.labels.name") } #blankを選択
         it "検索キーワードを含むタスクで絞り込まれる" do
           expect(all("tbody tr").count).to eq 2
           expect(all("tbody tr").first).to have_content search_name
@@ -144,19 +140,61 @@ RSpec.describe 'タスク管理機能', type: :system do
       end
       context "ステータス検索をした場合" do
         let(:search_name) { "" }
-        let(:search_status) { I18n.t("tasks.status.#{test_status}") }
+        let(:search_status) { I18n.t("tasks.status.#{task03.status}") }
+        let(:search_label) { I18n.t("admin.labels.name") } #blankを選択
         it "検索ステータスに完全一致するタスクが絞り込まれる" do
           expect(all("tbody tr").count).to eq 2
           expect(all("tbody tr").first).to have_content search_status
         end
       end
+      context "ラベル検索をした場合" do
+        let(:search_name) { "" }
+        let(:search_status) { I18n.t("tasks.status.title") } #blankを選択
+        let(:search_label) { task02.labels[0].name }
+        it "検索ラベルに完全一致するタスクが絞り込まれる" do
+          expect(all("tbody tr").count).to eq 2
+          expect(all("tbody tr").first).to have_content search_label
+        end
+      end
       context "タイトルとステータスで検索した場合" do
-        let(:search_name) { test_name }
-        let(:search_status) { I18n.t("tasks.status.#{test_status}") }
+        let(:search_name) { task02.name }
+        let(:search_status) { I18n.t("tasks.status.#{task02.status}") }
+        let(:search_label) { I18n.t("admin.labels.name") } #blankを選択
         it "検索キーワードをタイトルに含み、かつステータスに完全一致するタスクが絞り込まれる" do
           expect(all("tbody tr").count).to eq 1
           expect(all("tbody tr").first).to have_content search_name
           expect(all("tbody tr").first).to have_content search_status
+        end
+      end
+      context "タイトルとラベルで検索した場合" do
+        let(:search_name) { task03.name }
+        let(:search_status) { I18n.t("tasks.status.title") } #blankを選択
+        let(:search_label) { task03.labels[0].name }
+        it "検索キーワードをタイトルに含み、かつラベルに完全一致するタスクが絞り込まれる" do
+          expect(all("tbody tr").count).to eq 1
+          expect(all("tbody tr").first).to have_content search_name
+          expect(all("tbody tr").first).to have_content search_label
+        end
+      end
+      context "ステータスとラベルで検索した場合" do
+        let(:search_name) { "" }
+        let(:search_status) { I18n.t("tasks.status.#{task.status}") }
+        let(:search_label) { task.labels[0].name }
+        it "ステータスとラベルに完全一致するタスクが絞り込まれる" do
+          expect(all("tbody tr").count).to eq 1
+          expect(all("tbody tr").first).to have_content search_status
+          expect(all("tbody tr").first).to have_content search_label
+        end
+      end
+      context "タイトルとステータスとラベルで検索した場合" do
+        let(:search_name) { task.name }
+        let(:search_status) { I18n.t("tasks.status.#{task.status}") }
+        let(:search_label) { task.labels[0].name }
+        it "検索キーワードをタイトルに含みかつステータスとラベルに完全一致するタスクが絞り込まれる" do
+          expect(all("tbody tr").count).to eq 1
+          expect(all("tbody tr").first).to have_content search_name
+          expect(all("tbody tr").first).to have_content search_status
+          expect(all("tbody tr").first).to have_content search_label
         end
       end
     end
@@ -165,9 +203,12 @@ RSpec.describe 'タスク管理機能', type: :system do
   describe '詳細表示機能' do
     context '任意のタスク詳細画面に遷移した場合' do
       it '該当タスクの内容が表示される' do
+        task01.update(labels:[label_top01, label_top02])
         visit task_path(task01)
         expect(page).to have_content task01.name
         expect(page).to have_content task01.description
+        expect(page).to have_content task01.labels.first.name
+        expect(page).to have_content task01.labels.second.name
       end
     end
   end
@@ -177,6 +218,8 @@ RSpec.describe 'タスク管理機能', type: :system do
       visit edit_task_path(task01)
       fill_in "task_name", with: "修正のタスク"
       fill_in "task_description", with: "修正の仕事"
+      uncheck label_top01.name
+      check label_top02.name
       click_on I18n.t("helpers.submit.update")
     end
     context "タスクを編集した場合" do
@@ -186,10 +229,12 @@ RSpec.describe 'タスク管理機能', type: :system do
       it "元の情報は表示されない" do
         expect(page).to_not have_content "1つ目のタスク"
         expect(page).to_not have_content "1番目の仕事"
+        expect(page).to_not have_content label_top01.name
       end
-      it "変更が反映される" do
+      it "ラベルも含め変更が反映される" do
         expect(page).to have_content "修正のタスク", count: 2
         expect(page).to have_content "修正の仕事"
+        expect(page).to have_content label_top02.name
       end
     end
   end
