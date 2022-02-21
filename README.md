@@ -69,13 +69,17 @@ config.force_ssl = true
 
 ### 3.1. app/assets/images内のファイルを使用する予定の場合は、以下を設定
 
-デフォルトでは、本番環境でimagesファイルは使えない設定のため。
+~~デフォルトでは、本番環境でimagesファイルは使えない設定のため。~~
 
-config/enviroment/production.rb ファイルの記述の一部を以下のように変更（falseをtrueにする）
+~~config/enviroment/production.rb ファイルの記述の一部を以下のように変更（falseをtrueにする）~~
 
-```ruby
-config.assets.compile = true
-```
+~~config.assets.compile = true~~
+
+- image_tagを使用
+- app/assets/images内のファイルの場合、リンクパスはimagesまでのディレクトリを記載しない。
+  - X:image_tag("/app/assets/images/ファイル名.拡張子")
+  - ○:image_tag("ファイル名.拡張子")
+- JPEGファイルの場合は拡張子を".jpg"に設定
 
 ### 3.2. bootstrapを使用する場合、以下を設定
 
