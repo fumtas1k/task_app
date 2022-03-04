@@ -21,7 +21,7 @@
           <td><%= user.id %></td>
           <td><p><%= user.name %></p></td>
           <td><%= simple_format h(user.email) %></td>
-          <td><%= user.tasks.count %></td>
+          <td><%= user.task_ids.count %></td>
           <td><%= user.admin %></td>
           <td><%= l user.created_at, format: :medium %></td>
           <td><%= l user.updated_at, format: :medium %></td>
